@@ -81,7 +81,7 @@ function Game ( {score, setScore} ) {
 
 
     function getRandomQuestion(){
-        const questionType = [getRandomAdd, getRandomMinus,getRandomMult, getRandomDiv] 
+        const questionType = [getRandomAdd, getRandomAdd, getRandomMinus, getRandomMinus, getRandomMult, getRandomDiv] 
         const pickType = Math.floor(Math.random() * (questionType.length))
     
         questionType[pickType]()
