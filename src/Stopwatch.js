@@ -1,42 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react'
 
+const Stopwatch = ( {score} ) => {
 
-const Timer = () => {
 
-    const maxTime = 120
 
-    const [time, setTime] = useState(maxTime)
+    const [time, setTime] = useState(0)
     let startTime = useRef(new Date())
+
 
     const updateTime = (elapsed) => {
 
-        if(elapsed/1000 <= maxTime){
-            setTime(maxTime - elapsed/1000)
-        }else {
-            console.log(elapsed)
+        if(score < 40){
+            setTime(elapsed / 1000)
+        } else {
             document.getElementById('game').style.visibility = 'hidden'
         }
 
     }
 
-    useEffect(() => {
+    useEffect( () => {
 
         const timer = setInterval(() => {
 
             let elapsed = Date.parse(new Date()) - Date.parse(startTime.current)
             updateTime(elapsed)
 
-        }, 1000)
+        }, 200)
 
         return () => clearInterval(timer)
-
-    }, [])
+        
+    }, [score])
 
 
     return (
-        <p> Countdown Time: {time} </p>
+        <p> Race Timer: {time} </p>
     )
 
 }
 
-export default Timer
+export default Stopwatch
