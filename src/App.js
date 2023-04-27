@@ -32,7 +32,7 @@ function App() {
   return (
     <div>
 
-      <p> Score: {score}</p>
+      <p id = "score"> Score: {score}</p>
       <Toggle toggle = {toggle} score = {score}/>
 
       { /* <button onClick = {() => console.log(time)}> click me </button> */ }

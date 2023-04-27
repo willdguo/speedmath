@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 
 const Stopwatch = ( {score} ) => {
 
-
+    const maxScore = 40
 
     const [time, setTime] = useState(0)
     let startTime = useRef(new Date())
@@ -10,10 +10,12 @@ const Stopwatch = ( {score} ) => {
 
     const updateTime = (elapsed) => {
 
-        if(score < 40){
+        if(score < maxScore){
             setTime(elapsed / 1000)
         } else {
             document.getElementById('game').style.visibility = 'hidden'
+            document.getElementById('timer').style.textAlign = "center"
+            document.getElementById('timer').style.fontSize = "30px"            
         }
 
     }
@@ -33,7 +35,7 @@ const Stopwatch = ( {score} ) => {
 
 
     return (
-        <p> Race Timer: {time} </p>
+        <p id = "timer"> Race Timer: {time} </p>
     )
 
 }

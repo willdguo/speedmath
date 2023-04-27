@@ -15,6 +15,8 @@ const Timer = () => {
         }else {
             console.log(elapsed)
             document.getElementById('game').style.visibility = 'hidden'
+            document.getElementById('score').style.textAlign = 'center'
+            document.getElementById('score').style.fontSize = '30px'
         }
 
     }
@@ -34,7 +36,7 @@ const Timer = () => {
 
 
     return (
-        <p> Countdown Time: {time} </p>
+        <p id = "timer"> Countdown Time: {time} </p>
     )
 
 }
