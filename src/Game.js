@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 function Game ( {score, setScore} ) {
 
+
+    // bound of answers will be between lower & 2 * upper, kinda
     const lower = 10
     const upper = 100
     const operator = ['+','-','x','/']
