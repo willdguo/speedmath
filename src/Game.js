@@ -4,12 +4,18 @@ function Game ( {score, setScore} ) {
 
     const lower = 10
     const upper = 100
+    const operator = ['+','-','x','/']
 
     // input box value - refreshes to '' upon correct answer
     const [value, setValue] = useState('')
 
     // question numbers & operator; first two indices = integers, third = operator
     const [question, setQuestion] = useState([0, 0, 0]) //add, minus, mult, div = 0, 1, 2, 3
+
+    // stores past problems
+    // [FEATURES TO BE ADDED: store time per question, display questions that took the longest/shortest bursts]
+    const [problems, setProblems] = useState([])
+
 
     // user input -> checks if int, then checks if answer is right
     function handleValueChange(event) {
@@ -27,14 +33,17 @@ function Game ( {score, setScore} ) {
     // if user input is correct, calls getRandomQuestion
     function checkAnswer(input){
 
-        console.log(input, question[2])
-
         const correctAdd = (question[2] == 0 && input == question[0] + question[1])
         const correctMinus = (question[2] == 1 && input == question[0] - question[1])
         const correctMult = (question[2] == 2 && input == question[0] * question[1])
         const correctDiv = (question[2] == 3 && input == question[0] / question[1])
 
         if(correctAdd || correctMinus || correctMult || correctDiv){
+
+            const problem = question[0] + " " + operator[question[2]] + " " + question[1] // universalize this -> make code prettier
+            setProblems(problems.concat(problem))
+            console.log({problem})
+
             getRandomQuestion()
             setValue('')
             setScore(score + 1)
@@ -51,6 +60,7 @@ function Game ( {score, setScore} ) {
         setQuestion([rand1, rand2, 0])
     }
 
+    // remove chance of getting same number 2ce by altering bounds
     function getRandomMinus() {
         const rand1 = Math.floor(Math.random() * (2 * upper - lower)) + lower
         const rand2 = Math.floor(Math.random() * (2 * upper - lower)) + lower
@@ -61,8 +71,8 @@ function Game ( {score, setScore} ) {
     }
 
     function getRandomMult() {
-        const rand1 = Math.ceil(Math.random() * (Math.sqrt(2 * upper))) 
-        const rand2 = Math.ceil(Math.random() * Math.sqrt(2 * upper))
+        const rand1 = Math.ceil(Math.random() * (Math.sqrt(2 * upper))) + 1 
+        const rand2 = Math.ceil(Math.random() * Math.sqrt(2 * upper)) + 1
         console.log('random mult')
 
         setQuestion([rand1, rand2, 2])
@@ -70,7 +80,7 @@ function Game ( {score, setScore} ) {
 
 
     function getRandomDiv() {
-        const rand1 = Math.ceil(Math.random() * (Math.sqrt(2 * upper))) 
+        const rand1 = Math.ceil(Math.random() * Math.sqrt(2 * upper)) + 1
         const rand2 = Math.ceil(Math.random() * Math.sqrt(2 * upper)) + 1
         const val1 = rand1 * rand2
         console.log('random div')
@@ -86,8 +96,6 @@ function Game ( {score, setScore} ) {
     
         questionType[pickType]()
     }
-
-    const operator = ['+','-','x','/']
 
     window.addEventListener('load', function() {
         getRandomQuestion()

@@ -20,14 +20,12 @@ function App() {
 
   }
 
-
   function changeToggle() {
       setToggle(toggle + 1)
       localStorage.setItem('toggle', toggle)
       console.log(toggle)
       window.location.reload()
   }
-
 
   return (
     <div>
@@ -38,9 +36,7 @@ function App() {
       { /* <button onClick = {() => console.log(time)}> click me </button> */ }
 
       <div id = "main">
-
         <Game score = {score} setScore = {setScore}/>
-
       </div>
 
       <button onClick = {() => window.location.reload()}> Restart </button>
