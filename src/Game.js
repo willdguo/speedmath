@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function Game ( {score, setScore} ) {
+function Game ( {score, setScore, problems, setProblems} ) {
 
 
     // bound of answers will be between lower & 2 * upper, kinda
@@ -14,9 +14,17 @@ function Game ( {score, setScore} ) {
     // question numbers & operator; first two indices = integers, third = operator
     const [question, setQuestion] = useState([0, 0, 0]) //add, minus, mult, div = 0, 1, 2, 3
 
-    // stores past problems
-    // [FEATURES TO BE ADDED: store time per question, display questions that took the longest/shortest bursts]
-    const [problems, setProblems] = useState([])
+
+    function toProblem(i) {
+
+        if (i == 1){
+            const temp = [question[0] + question[1], question[0] - question[1], question[0] * question[1], question[0]/question[1]][question[2]]
+
+            return question[0] + " " + operator[question[2]] + " " + question[1] + " = " + temp
+        }
+
+        return question[0] + " " + operator[question[2]] + " " + question[1]
+    }
 
 
     // user input -> checks if int, then checks if answer is right
@@ -42,10 +50,16 @@ function Game ( {score, setScore} ) {
 
         if(correctAdd || correctMinus || correctMult || correctDiv){
 
-            const problem = question[0] + " " + operator[question[2]] + " " + question[1] // universalize this -> make code prettier
-            setProblems(problems.concat(problem))
-            console.log({problem})
+            const problem = {
+                problem: toProblem(1),
+                time: 0,
+                id: problems.length,           
+            }
 
+            setProblems(problems.concat(problem))
+            // console.log(problems)
+
+            
             getRandomQuestion()
             setValue('')
             setScore(score + 1)
@@ -68,7 +82,7 @@ function Game ( {score, setScore} ) {
         const rand2 = Math.floor(Math.random() * (2 * upper - lower)) + lower
 
         console.log('random minus')
-        console.log(rand1, rand2)
+        // console.log(rand1, rand2)
         setQuestion([Math.max(rand1, rand2), Math.min(rand1, rand2), 1])
     }
 
@@ -104,8 +118,19 @@ function Game ( {score, setScore} ) {
     })
 
     return (
-        <div id = 'game'>
-            {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange}/>
+        <div>
+            <div id = 'game'>
+                {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange}/>
+            </div>
+
+            <dl id = 'problem-list'>
+                {problems.map(problem =>
+                    <li key = {problem.id} id = {problem.id}>
+                        {problem.problem} {problem.time}
+                    </li>
+                ).reverse()}
+            </dl>
+
         </div>
     )
 
