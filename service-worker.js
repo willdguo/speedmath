@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/speedmath/precache-manifest.6a85752d76b8e66fa99ca0269334b312.js"
+  "/speedmath/precache-manifest.5b7d445cac2b673a11ca6ce5d19a9d96.js"
 );
 
 workbox.clientsClaim();
