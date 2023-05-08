@@ -3,17 +3,16 @@ import Game from './Game'
 
 function App() {
 
-  // toggle visibility of problems; by default is no visible
+  // toggle visibility of problems; by default is not visible
   const [displayProblems, setDisplayProblems] = useState('Show Problems')
 
   // keeps track of game mode; by default is set to countdown mode
   const [toggle, setToggle] = useState(0)
 
+
   const checkToggle = () => {
 
     if('toggle' in localStorage) {
-      // console.log('hello')
-      console.log(localStorage.getItem('toggle'))
       setToggle(parseInt(localStorage.getItem('toggle')) + 1)
     }
 
@@ -29,7 +28,7 @@ function App() {
         document.getElementById('problem-list').style.display = 'none'
         document.getElementById('graph').style.display = 'none'
         setDisplayProblems('Show Problems')
-      }else {
+      } else {
         document.getElementById('problem-list').style.display = 'block'
         document.getElementById('graph').style.display = 'flex'
         setDisplayProblems('Hide Problems')
@@ -51,15 +50,13 @@ function App() {
 
   }
 
-
   // change state of toggle buton
   function changeToggle() {
-      setToggle(toggle + 1)
       localStorage.setItem('toggle', toggle)
-      // console.log(toggle)
       window.location.reload()
   }
             
+
   // function to change visibility of past problems - stores past visibility state
   function toggleProblems () {
 

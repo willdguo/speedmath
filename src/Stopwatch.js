@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 
+
 const Stopwatch = ( {toggle, score, problems, setProblems, data, setData} ) => {
 
     // max score - game ends once this score is reached
@@ -29,8 +30,13 @@ const Stopwatch = ( {toggle, score, problems, setProblems, data, setData} ) => {
             } else {
                 document.getElementById('game').style.visibility = 'hidden'
                 document.getElementById('score').style.textAlign = 'center'
-                //document.getElementById('score').style.position = 'absolute'
                 document.getElementById('score').style.fontSize = '30px'
+
+                console.log("first digit " + problems.map(problem => problem.problem.split(/[\s=]+/)[0]))
+                console.log("second digit " + problems.map(problem => problem.problem.split(/[\s=]+/)[2]))
+                console.log("operator " + problems.map(problem => problem.problem.split(/[\s=]+/)[1]))
+                console.log("answer " + problems.map(problem => problem.problem.split(/[\s=]+/)[3]))
+                console.log("time " + problems.map(problem => problem.time))
             }
 
         } else {
@@ -45,7 +51,6 @@ const Stopwatch = ( {toggle, score, problems, setProblems, data, setData} ) => {
             }
 
         }
-        
 
     }
 

@@ -41,8 +41,6 @@ function Game ( {toggle} ) {
     function handleValueChange(event) {
         const input = event.target.value
 
-        console.log(parseInt('a', 10))
-
         if(!isNaN(input)){
             setValue(input)
             checkAnswer(parseInt(input, 10))
