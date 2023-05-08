@@ -22,7 +22,7 @@
         margin-top: 50px;
         text-align: center;
         font-size: 30px;
-        background-color:lightgray
+        background-color:lightgray;
       }
 
       #corner {
@@ -33,7 +33,7 @@
       }
 
       #description {
-        padding-top: 200px;
+        padding-top: 50px;
         padding-left: 10px;
         text-align: left;
       }
@@ -54,18 +54,18 @@
       }
 
       #buttons {
-        float: left;
+        position: fixed;
+        right: 1%;
       }
 
       #graph {
         display: flex;
         justify-content: center;
         align-items: center;
-        visibility: hidden;
       }
 
       #graph .recharts-wrapper {
-        transform: translateX(-40%);
+        transform: translateX(-10%);
       } 
 
     </style>
@@ -78,7 +78,7 @@
 
     <div id = "description">
       <p id = "bold">Description</p>
-      <p> Test your mental math capabilities. Each question has a nonnegative answer no greater than 250. There are two modes: </p>
+      <p> Test your mental math capabilities. Each question has a nonnegative answer no greater than 256. There are two modes: </p>
       <ul>
         <li> <strong>Countdown</strong>: Solve as many problems as you can in the allotted time. </li>
         <li> <strong>Race</strong>: See how long it takes for you to solve 40 problems. </li>

@@ -1,7 +1,17 @@
+import { ScatterChart, Scatter, Label, XAxis, YAxis } from 'recharts'
 import React, { useState } from 'react'
+import Stopwatch from './Stopwatch'
 
-function Game ( {score, setScore, problems, setProblems} ) {
+function Game ( {toggle} ) {
 
+    // keeps track of score
+    const [score, setScore] = useState(0)
+
+    // stores past problems
+    const [problems, setProblems] = useState([])
+
+    // stores problem data (problem number & problem time) to be graphed
+    const [data, setData] = useState([{x: 0, time: 0}])
 
     // bound of answers will be between lower & 2 * upper, kinda
     const lower = 10
@@ -17,7 +27,7 @@ function Game ( {score, setScore, problems, setProblems} ) {
 
     function toProblem(i) {
 
-        if (i == 1){
+        if (i === 1){
             const temp = [question[0] + question[1], question[0] - question[1], question[0] * question[1], question[0]/question[1]][question[2]]
 
             return question[0] + " " + operator[question[2]] + " " + question[1] + " = " + temp
@@ -31,10 +41,12 @@ function Game ( {score, setScore, problems, setProblems} ) {
     function handleValueChange(event) {
         const input = event.target.value
 
-        if(input == parseInt(input, 10)){
+        console.log(parseInt('a', 10))
+
+        if(!isNaN(input)){
             setValue(input)
             checkAnswer(parseInt(input, 10))
-        } else if (input == ''){
+        } else if (input === ''){
             setValue(input)
         }
 
@@ -43,10 +55,10 @@ function Game ( {score, setScore, problems, setProblems} ) {
     // if user input is correct, calls getRandomQuestion
     function checkAnswer(input){
 
-        const correctAdd = (question[2] == 0 && input == question[0] + question[1])
-        const correctMinus = (question[2] == 1 && input == question[0] - question[1])
-        const correctMult = (question[2] == 2 && input == question[0] * question[1])
-        const correctDiv = (question[2] == 3 && input == question[0] / question[1])
+        const correctAdd = (question[2] === 0 && input === question[0] + question[1])
+        const correctMinus = (question[2] === 1 && input === question[0] - question[1])
+        const correctMult = (question[2] === 2 && input === question[0] * question[1])
+        const correctDiv = (question[2] === 3 && input === question[0] / question[1])
 
         if(correctAdd || correctMinus || correctMult || correctDiv){
 
@@ -119,6 +131,10 @@ function Game ( {score, setScore, problems, setProblems} ) {
 
     return (
         <div>
+
+            <p id = "score"> Score: {score}</p>
+            <Stopwatch toggle = {toggle} score = {score} problems = {problems} setProblems = {setProblems} data = {data} setData = {setData}/>
+
             <div id = 'game'>
                 {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange}/>
             </div>
@@ -130,6 +146,26 @@ function Game ( {score, setScore, problems, setProblems} ) {
                     </li>
                 ).reverse()}
             </dl>
+
+
+            <div id = "graph">
+
+                <ScatterChart width={600} height={400} margin = {{ top: 5, right: 10, left: 50, bottom: 20 }}>
+
+                    <XAxis type="number" dataKey="x">
+                    <Label value = "Problems" position = "bottom"/>
+                    </XAxis>
+
+                    <YAxis type="number" dataKey="time">
+                    <Label value = "Time" position = "insideRight" angle = {-90} offset = {50} />
+                    </YAxis>
+
+                    <Scatter data = {data} fill="black" lineJointType='monotoneX' line/>
+
+                </ScatterChart>
+
+            </div>
+
 
         </div>
     )

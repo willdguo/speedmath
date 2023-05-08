@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 
-const Stopwatch = ( {score, problems, setProblems, data, setData} ) => {
+const Stopwatch = ( {toggle, score, problems, setProblems, data, setData} ) => {
 
     // max score - game ends once this score is reached
     const maxScore = 40
+    const maxTime = 120
 
-    const [time, setTime] = useState(0)
+    const [time, setTime] = useState(toggle % 2 === 0 ? maxTime : 0)
+    const text = toggle % 2 === 0 ? "Race Timer: " : "Countdown Timer: "
     let startTime = useRef(new Date())
     
     let problemTracker = useRef([score, new Date()]) // checks how much time is spent on the nth problem 
@@ -21,14 +23,32 @@ const Stopwatch = ( {score, problems, setProblems, data, setData} ) => {
     // updates time every second; otherwise centers score & increases font size
     const updateTime = (elapsed) => {
 
-        if(score < maxScore){
-            setTime(elapsed / 1000)
+        if(toggle % 2 === 1){
+
+            if(elapsed / 1000 <= maxTime){
+
+                setTime(maxTime - elapsed / 1000)
+
+            } else {
+                document.getElementById('game').style.visibility = 'hidden'
+                document.getElementById('score').style.textAlign = 'center'
+                //document.getElementById('score').style.position = 'absolute'
+                document.getElementById('score').style.fontSize = '30px'
+            }
 
         } else {
-            document.getElementById('game').style.visibility = 'hidden'
-            document.getElementById('timer').style.textAlign = "center"
-            document.getElementById('timer').style.fontSize = "30px"
+
+            if(score < maxScore){
+                setTime(elapsed / 1000)
+    
+            } else {
+                document.getElementById('game').style.visibility = 'hidden'
+                document.getElementById('timer').style.textAlign = "center"
+                document.getElementById('timer').style.fontSize = "30px"
+            }
+
         }
+        
 
     }
 
@@ -51,7 +71,7 @@ const Stopwatch = ( {score, problems, setProblems, data, setData} ) => {
 
     const problemTime = () => {
 
-        if (score != problemTracker.current[0]){
+        if (score !== problemTracker.current[0]){
             const t = timeDif(new Date(), problemTracker.current[1])
             problemTracker.current = [score, new Date()]
 
@@ -85,11 +105,11 @@ const Stopwatch = ( {score, problems, setProblems, data, setData} ) => {
 
         return () => clearInterval(timer)
         
-    }, [score])
+    }, [score, toggle])
 
 
     return (
-        <p id = "timer"> Race Timer: {time} </p>
+        <p id = "timer"> {text} {time} </p>
     )
 
 }
