@@ -14,10 +14,7 @@ const Stopwatch = ( {toggle, score, problems, setProblems, data, setData} ) => {
 
     // returns difference in time, including milliseconds 
     const timeDif = (time1, time2) => {
-        const seconds = (Date.parse(time1) - Date.parse(time2))/1000 // typical subtraction doesn't give milliseconds - CHECK if there's a native way for this
-        const milliseconds = time1.getMilliseconds() - time2.getMilliseconds()
-
-        return (seconds + milliseconds/1000).toFixed(2)
+        return ((time1.getTime() - time2.getTime())/1000).toFixed(2)
     }
 
     // updates time every second; otherwise centers score & increases font size
