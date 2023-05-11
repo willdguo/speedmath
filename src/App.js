@@ -15,8 +15,10 @@ function App() {
 
   const checkToggle = () => {
 
+    // for some reason this isn't consistent - doesn't always accept toggle for other users
     if('toggle' in localStorage) {
       setToggle(parseInt(localStorage.getItem('toggle')) + 1)
+      console.log((parseInt(localStorage.getItem('toggle')) + 1) + 'toggle ' + toggle)
     }
 
   }
@@ -45,12 +47,24 @@ function App() {
 
   }
 
+  const checkTheme = () => {
+
+    if('theme' in localStorage) { 
+      setTheme(localStorage.getItem('theme')) // fix to incorporate toggleColors inside the render
+    }
+
+  }
+
   // checks if stored mode exists
   window.onload = () => {
 
     checkToggle()
     checkProblems()
+    // checkTheme()
 
+    console.log("current theme " + theme)
+    console.log('current toggle ' + toggle)
+    
   }
 
   // change state of toggle buton
@@ -70,7 +84,7 @@ function App() {
         document.getElementById('graph').style.display = 'none' //changes visibility of graph as well
         localStorage.setItem('displayProblems', 'hidden')
 
-    }else{
+    } else {
 
         setDisplayProblems('Hide Problems')
         document.getElementById('problem-list').style.display = 'block'
@@ -87,9 +101,8 @@ function App() {
     const tc = ['white', 'black']
     const gc = ['light', 'dark']
 
-    setTheme(theme + 1)
+    setTheme((theme + 1) % 2)
     localStorage.setItem('theme', theme)
-    // document.body.style.background = tc[theme % 2]
 
     var all = document.getElementsByTagName('*')
 
@@ -98,11 +111,8 @@ function App() {
       let element = all[i]
 
       element.style.background = tc[theme % 2]
-      //console.log(element.id + " " + typeof(element.id))
 
       if(isNaN(parseInt(element.id))){
-
-        //console.log(element.id)
 
         element.style.color = tc[(theme + 1) % 2]
 
@@ -132,7 +142,11 @@ function App() {
 
   const themeColors = ['light', 'dark']
 
-  // consider filling buttons w/ icons - a) takes up less space, b) more aesthetic
+  // consider filling buttons w/ icons - <img href = './restart-icon.png' alt = 'restart' />
+  // ADD DARK MODE:
+  // <button onClick = {toggleColors}> {themeColors[theme % 2]} </button>
+
+  // add buttons onHover
   
   return (
 
@@ -143,7 +157,6 @@ function App() {
         <button onClick = {() => window.location.reload()}> Restart </button>
         <button onClick = {changeToggle}> Toggle Gamemode </button>
         <button onClick = {toggleProblems}>  {displayProblems} </button>
-        <button onClick = {toggleColors}> {themeColors[theme % 2]} </button>
 
       </div>      
 
@@ -152,7 +165,7 @@ function App() {
       </div>
 
     </div>
-    
+
   );
 
 }
