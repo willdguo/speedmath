@@ -1,11 +1,11 @@
 {
-  "main.js": "/speedmath/static/js/main.cf0dd097.chunk.js",
-  "main.js.map": "/speedmath/static/js/main.cf0dd097.chunk.js.map",
-  "static/js/1.795e31e8.chunk.js": "/speedmath/static/js/1.795e31e8.chunk.js",
-  "static/js/1.795e31e8.chunk.js.map": "/speedmath/static/js/1.795e31e8.chunk.js.map",
+  "main.js": "/speedmath/static/js/main.cba1ff4c.chunk.js",
+  "main.js.map": "/speedmath/static/js/main.cba1ff4c.chunk.js.map",
+  "static/js/1.500bef48.chunk.js": "/speedmath/static/js/1.500bef48.chunk.js",
+  "static/js/1.500bef48.chunk.js.map": "/speedmath/static/js/1.500bef48.chunk.js.map",
   "runtime~main.js": "/speedmath/static/js/runtime~main.d4f2921d.js",
   "runtime~main.js.map": "/speedmath/static/js/runtime~main.d4f2921d.js.map",
   "index.html": "/speedmath/index.html",
-  "precache-manifest.5b7d445cac2b673a11ca6ce5d19a9d96.js": "/speedmath/precache-manifest.5b7d445cac2b673a11ca6ce5d19a9d96.js",
+  "precache-manifest.f9335d56811bfd54ffd97250a4b15844.js": "/speedmath/precache-manifest.f9335d56811bfd54ffd97250a4b15844.js",
   "service-worker.js": "/speedmath/service-worker.js"
 }
