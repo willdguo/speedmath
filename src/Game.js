@@ -2,7 +2,7 @@ import { ScatterChart, Scatter, Label, XAxis, YAxis } from 'recharts'
 import React, { useState } from 'react'
 import Stopwatch from './Stopwatch'
 
-function Game ( {toggle} ) {
+function Game ( {toggle, theme} ) {
 
     // keeps track of score
     const [score, setScore] = useState(0)
@@ -97,8 +97,8 @@ function Game ( {toggle} ) {
     }
 
     function getRandomMult() {
-        const rand1 = Math.ceil(Math.random() * (Math.sqrt(2 * upper))) + 1 
-        const rand2 = Math.ceil(Math.random() * Math.sqrt(2 * upper)) + 1
+        const rand1 = Math.ceil(Math.random() * (2 * lower - 1)) + 1 
+        const rand2 = Math.ceil(Math.random() * (2 * lower - 1)) + 1
         console.log('random mult')
 
         setQuestion([rand1, rand2, 2])
@@ -106,8 +106,8 @@ function Game ( {toggle} ) {
 
 
     function getRandomDiv() {
-        const rand1 = Math.ceil(Math.random() * Math.sqrt(2 * upper)) + 1
-        const rand2 = Math.ceil(Math.random() * Math.sqrt(2 * upper)) + 1
+        const rand1 = Math.ceil(Math.random() * (2 * lower - 1)) + 1
+        const rand2 = Math.ceil(Math.random() * (2 * lower - 1)) + 1
         const val1 = rand1 * rand2
         console.log('random div')
 
@@ -137,7 +137,7 @@ function Game ( {toggle} ) {
                 {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange}/>
             </div>
 
-            <dl id = 'problem-list'>
+            <dl id = 'problem-list' color = {['black', 'white'][theme % 2]}>
                 {problems.map(problem =>
                     <li key = {problem.id} id = {problem.id}>
                         {problem.problem} {problem.time}
@@ -150,15 +150,15 @@ function Game ( {toggle} ) {
 
                 <ScatterChart width={600} height={400} margin = {{ top: 5, right: 10, left: 50, bottom: 20 }}>
 
-                    <XAxis type="number" dataKey="x">
+                    <XAxis type="number" dataKey="x" stroke = {['black', 'white'][(theme + 1) % 2]}>
                     <Label value = "Problems" position = "bottom"/>
                     </XAxis>
 
-                    <YAxis type="number" dataKey="time">
+                    <YAxis type="number" dataKey="time" stroke = {['black', 'white'][(theme + 1) % 2]}>
                     <Label value = "Time" position = "insideRight" angle = {-90} offset = {50} />
                     </YAxis>
 
-                    <Scatter data = {data} fill="black" lineJointType='monotoneX' line/>
+                    <Scatter id = "scatter" data = {data} fill="black" lineJointType='monotoneX' line/>
 
                 </ScatterChart>
 

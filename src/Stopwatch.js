@@ -32,11 +32,13 @@ const Stopwatch = ( {toggle, score, problems, setProblems, data, setData} ) => {
                 document.getElementById('score').style.textAlign = 'center'
                 document.getElementById('score').style.fontSize = '30px'
 
+                
                 console.log("first digit " + problems.map(problem => problem.problem.split(/[\s=]+/)[0]))
                 console.log("second digit " + problems.map(problem => problem.problem.split(/[\s=]+/)[2]))
                 console.log("operator " + problems.map(problem => problem.problem.split(/[\s=]+/)[1]))
                 console.log("answer " + problems.map(problem => problem.problem.split(/[\s=]+/)[3]))
                 console.log("time " + problems.map(problem => problem.time))
+                
             }
 
         } else {
@@ -77,9 +79,14 @@ const Stopwatch = ( {toggle, score, problems, setProblems, data, setData} ) => {
             const t = timeDif(new Date(), problemTracker.current[1])
             problemTracker.current = [score, new Date()]
 
-            const colors = ['green', 'grey', 'red']
-            document.getElementById(score - 1).style.color = colors[getRange(t)]
-            document.getElementById(score - 1).style.opacity = 0.5
+            const colors = ['green', 'lightgreen', 'grey', 'white', 'red', 'lightcoral']
+            const currentBg = document.getElementById('buttons').style.background === 'black'
+
+            //console.log(currentBg)
+
+            document.getElementById(score - 1).style.color = colors[getRange(t) * 2 + currentBg]
+            document.getElementById(score - 1).style.opacity = 0.5 + 0.25 * currentBg
+            document.getElementById(score - 1).style.background = currentBg ? 'black' : 'white'
 
             const lastProblem = problems.pop()
             lastProblem['time'] = t
