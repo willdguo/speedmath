@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/speedmath/static/js/main.d843183d.js",
+    "static/media/restart1.png": "/speedmath/static/media/restart1.f9638e058b6217518139.png",
+    "static/media/data1.png": "/speedmath/static/media/data1.391d3d73156eb108479e.png",
+    "index.html": "/speedmath/index.html",
+    "main.d843183d.js.map": "/speedmath/static/js/main.d843183d.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.d843183d.js"
+  ]
+}
