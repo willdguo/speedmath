@@ -1,5 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Game from './Game'
+import restart from './icons/restart1.png'
+import toggleImg from './icons/toggle2.png'
+import dataImg from './icons/data1.png'
+import themeImg from './icons/light1.png'
 
 function App() {
 
@@ -9,9 +13,19 @@ function App() {
   // keeps track of game mode; by default is set to countdown mode
   const [toggle, setToggle] = useState(0)
 
-  // color mode (1 light, 0 dark)
-  const [theme, setTheme] = useState(1)
+  // color mode (1 dark, 0 light)
+  const [theme, setTheme] = useState(0)
 
+  // checks if stored mode exists
+  window.onload = () => {
+    
+    checkToggle()
+    checkProblems()
+    checkTheme()
+    
+    /* const temp = ['light', 'dark']
+    console.log("actual current theme " + temp[localStorage.getItem('theme')]) */
+  }
 
   const checkToggle = () => {
 
@@ -50,21 +64,17 @@ function App() {
   const checkTheme = () => {
 
     if('theme' in localStorage) { 
-      setTheme(localStorage.getItem('theme')) // fix to incorporate toggleColors inside the render
+
+      const storedTheme = parseInt(localStorage.getItem('theme'))
+
+      const temp = ['light', 'dark']
+
+      console.log("theme was in local storage!" + temp[localStorage.getItem('theme')])
+      setColors(storedTheme)
+      setTheme(storedTheme)
+
     }
 
-  }
-
-  // checks if stored mode exists
-  window.onload = () => {
-
-    checkToggle()
-    checkProblems()
-    // checkTheme()
-
-    console.log("current theme " + theme)
-    console.log('current toggle ' + toggle)
-    
   }
 
   // change state of toggle buton
@@ -96,57 +106,56 @@ function App() {
   } 
 
 
-  function toggleColors () {
+  function setColors(k) {
+    
+    // console.log("setting colors " + k)
+    const tc = ['white', 'black'] // background colors - alternates b/t white & black
+    const gc = ['light', 'dark'] // general color - alternates b/t lighter & darker colors
+    const cc = ['white', 'grey'] // conditional color - certain elements don't work well w/ white/black so they'll have less extreme colors
 
-    const tc = ['white', 'black']
-    const gc = ['light', 'dark']
-
-    setTheme((theme + 1) % 2)
-    localStorage.setItem('theme', theme)
-
-    var all = document.getElementsByTagName('*')
+    var all = document.querySelectorAll('*:not(img)')
 
     for(var i = 0; i < all.length; i++){
 
       let element = all[i]
 
-      element.style.background = tc[theme % 2]
-
-      if(isNaN(parseInt(element.id))){
-
-        element.style.color = tc[(theme + 1) % 2]
-
+      if(element.tagName.toLowerCase() === 'button'){
+        element.style.background = cc[k % 2]
       } else {
+        element.style.background = tc[k % 2]
+      }
 
-        const problemColors = ['green', 'lightgreen', 'grey', 'white', 'red', 'lightcoral']
-        
-        if(theme % 2 === 0){
-          element.style.opacity = 0.5
-          const current = problemColors.indexOf(element.style.color)
-          element.style.color = problemColors[current - 1]
-          
-        } else {
-          element.style.opacity = 0.75
-          const current = problemColors.indexOf(element.style.color)
-          element.style.color = problemColors[current + 1]
-        }
+      if(element.id !== 'toggle'){
+
+          if(!element.hasAttribute('key')){
+
+            element.style.color = tc[(k + 1) % 2]
+    
+          }
 
       }
 
     }
 
-    document.getElementById('game').style.background = gc[theme % 2] + "grey"
-    //document.getElementById('scatter').style.color = tc[(theme + 1) % 2] - MAKE SCATTER PLOT CHANGE COLOR MODE TOO
+    document.getElementById('game').style.background = gc[k % 2] + "grey"
 
   }
 
-  const themeColors = ['light', 'dark']
+  function toggleColors () {
 
-  // consider filling buttons w/ icons - <img href = './restart-icon.png' alt = 'restart' />
-  // ADD DARK MODE:
-  // <button onClick = {toggleColors}> {themeColors[theme % 2]} </button>
+    setTheme((theme + 1) % 2)
+    localStorage.setItem('theme', (theme + 1) % 2)
+    setColors((theme + 1) % 2)
 
-  // add buttons onHover
+  }
+
+  // css style for button icons. clean up for readability
+  const buttonImgStyle = {
+    width: "20px",
+    height: "20px",
+    backgroundColor: "transparent",
+    marginLeft: "0"
+  }
   
   return (
 
@@ -154,15 +163,17 @@ function App() {
 
       <div id = "buttons">
 
-        <button onClick = {() => window.location.reload()}> Restart </button>
-        <button onClick = {changeToggle}> Toggle Gamemode </button>
-        <button onClick = {toggleProblems}>  {displayProblems} </button>
+        <button onClick = {() => window.location.reload()}> <img src = {restart} style = {buttonImgStyle} alt = "restart"/> </button>
+        <button onClick = {changeToggle}> <img src = {toggleImg} style = {buttonImgStyle} alt = "toggle gamemode" /> </button>
+        <button onClick = {toggleProblems}> <img src = {dataImg} style = {buttonImgStyle} alt = "show problems" /> </button>
+        <button onClick = {toggleColors} id = 'toggle'> <img src = {themeImg} style = {buttonImgStyle} alt = "change theme" /> </button>
 
       </div>      
 
       <div id = "main">
         <Game toggle = {toggle} theme = {theme}/>
       </div>
+
 
     </div>
 
