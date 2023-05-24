@@ -1,11 +1,12 @@
 {
-  "main.js": "/speedmath/static/js/main.a2ab1b8f.chunk.js",
-  "main.js.map": "/speedmath/static/js/main.a2ab1b8f.chunk.js.map",
-  "static/js/1.500bef48.chunk.js": "/speedmath/static/js/1.500bef48.chunk.js",
-  "static/js/1.500bef48.chunk.js.map": "/speedmath/static/js/1.500bef48.chunk.js.map",
-  "runtime~main.js": "/speedmath/static/js/runtime~main.d4f2921d.js",
-  "runtime~main.js.map": "/speedmath/static/js/runtime~main.d4f2921d.js.map",
-  "index.html": "/speedmath/index.html",
-  "precache-manifest.b5cd034ac59314a5be313fdf1441a31e.js": "/speedmath/precache-manifest.b5cd034ac59314a5be313fdf1441a31e.js",
-  "service-worker.js": "/speedmath/service-worker.js"
+  "files": {
+    "main.js": "/speedmath/static/js/main.d843183d.js",
+    "static/media/restart1.png": "/speedmath/static/media/restart1.f9638e058b6217518139.png",
+    "static/media/data1.png": "/speedmath/static/media/data1.391d3d73156eb108479e.png",
+    "index.html": "/speedmath/index.html",
+    "main.d843183d.js.map": "/speedmath/static/js/main.d843183d.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.d843183d.js"
+  ]
 }
