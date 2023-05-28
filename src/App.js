@@ -8,7 +8,7 @@ import LoadData from './components/LoadData'
 
 function App() {
 
-  const [displayProblems, setDisplayProblems] = useState('Show Problems')   // toggle visibility of problems; by default is not visible
+  const [displayProblems, setDisplayProblems] = useState('Hide Problems')   // toggle visibility of problems; by default is not visible
   const [toggle, setToggle] = useState(0)   // keeps track of game mode; by default is set to countdown mode
   const [theme, setTheme] = useState(0)   // color mode (1 dark, 0 light)
   const [playing, setPlaying] = useState(0)
