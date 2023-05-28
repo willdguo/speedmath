@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react'
 
 
-const Stopwatch = ( {toggle, score} ) => {
+const Stopwatch = ( {toggle, score, playing} ) => {
 
     const maxScore = 40 // max score - game ends once this score is reached when toggle = 0
     const maxTime = 120 // max time - game ends once time hits 0 when toggle = 1
 
-    const [time, setTime] = useState(toggle % 2 === 0 ? maxTime : 0)
+    const [time, setTime] = useState(toggle % 2 === 0 ? 0 : maxTime)
     const text = toggle % 2 === 0 ? "Race Timer: " : "Countdown Timer: "
     let startTime = useRef(new Date())
+
     
     useEffect( () => {
+
 
         // updates time every second; otherwise centers score & increases font size
         const updateTime = (elapsed) => {
@@ -53,14 +55,25 @@ const Stopwatch = ( {toggle, score} ) => {
 
         const timer = setInterval(() => {
 
-            let elapsed = Date.parse(new Date()) - Date.parse(startTime.current)
-            updateTime(elapsed)
+            if(playing){
+
+                let elapsed = Date.parse(new Date()) - Date.parse(startTime.current)
+                updateTime(elapsed)
+
+            } else {
+
+                startTime.current = new Date()
+                // console.log(startTime.current)
+                // console.log(time) // glitch where time doesn't update prior to start. on countdown, time starts @ 0 for a split second
+                // console.log(toggle % 2 === 0)
+
+            }
 
         }, 1000)
 
         return () => clearInterval(timer)
-        
-    }, [score, toggle])
+
+    }, [playing, score, toggle])
 
 
     return (

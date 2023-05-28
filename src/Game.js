@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import Stopwatch from './Stopwatch'
-import Graph from './Graph'
+import React, { useEffect, useState } from 'react'
+import Stopwatch from './components/Stopwatch'
+import Graph from './components/Graph'
 
-function Game ( {toggle, theme} ) {
+function Game ( {toggle, theme, playing} ) {
 
     // keeps track of score
     const [score, setScore] = useState(0)
@@ -27,6 +27,20 @@ function Game ( {toggle, theme} ) {
 
     // tracks how long is spent on each problem
     const [probTime, setProbTime] = useState((new Date()).getTime())
+
+
+    useEffect (() => { // useEffect redundant? (integrate w/ Stopwatch - ideally all hooks in 1 location)
+
+        console.log("gamejs useEffect")
+
+        if(playing){
+            console.log("start problem time updated")
+            setProbTime((new Date()).getTime())
+        }
+
+        return
+
+    }, [playing])
 
 
     function toProblem(i) {
@@ -62,7 +76,7 @@ function Game ( {toggle, theme} ) {
         const correctMult = (question[2] === 2 && input === question[0] * question[1])
         const correctDiv = (question[2] === 3 && input === question[0] / question[1])
 
-        if(correctAdd || correctMinus || correctMult || correctDiv){
+        if(correctAdd || correctMinus || correctMult || correctDiv) {
 
             const temp = ['light', 'dark']
 
@@ -162,7 +176,7 @@ function Game ( {toggle, theme} ) {
         <div>
 
             <p id = "score"> Score: {score}</p>
-            <Stopwatch toggle = {toggle} score = {score}/>
+            <Stopwatch toggle = {toggle} score = {score} playing = {playing}/>
 
             <div id = 'game'>
                 {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange}/>
