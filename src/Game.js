@@ -2,39 +2,28 @@ import React, { useEffect, useState } from 'react'
 import Stopwatch from './components/Stopwatch'
 import Graph from './components/Graph'
 
-function Game ( {toggle, theme, playing} ) {
+function Game ( {toggle, theme, playing, setPlaying} ) {
 
-    // keeps track of score
-    const [score, setScore] = useState(0)
-
-    // stores past problems
-    const [problems, setProblems] = useState([])
-
-    // stores problem data (problem number & problem time) to be graphed
-    const [data, setData] = useState([{x: 0, time: 0}])
+    const [score, setScore] = useState(0) // keeps track of score
+    const [problems, setProblems] = useState([]) // stores past problems
+    const [data, setData] = useState([{x: 0, time: 0}]) // stores problem data (problem number & problem time) to be graphed
+    const [value, setValue] = useState('')  // input box value - refreshes to '' upon correct answer
+    const [question, setQuestion] = useState([0, 0, 0]) // first two indices = integers, third = operator (add, minus, mult, div = 0, 1, 2, 3)
+    const [probTime, setProbTime] = useState((new Date()).getTime()) // tracks how long is spent on each problem
 
     // bound of answers will be between lower & 2 * upper, kinda
     const lower = 10
     const upper = 100
     const operator = ['+','-','x','/']
 
-    // input box value - refreshes to '' upon correct answer
-    const [value, setValue] = useState('')
-
-    // question numbers & operator; first two indices = integers, third = operator
-    const [question, setQuestion] = useState([0, 0, 0]) //add, minus, mult, div = 0, 1, 2, 3
-
-
-    // tracks how long is spent on each problem
-    const [probTime, setProbTime] = useState((new Date()).getTime())
-
+    const colors = ['green', 'lightgreen', 'grey', 'white', 'red', 'lightcoral'] // problem colors for good/mid/bad times. odd = light theme, even = dark theme
 
     useEffect (() => { // useEffect redundant? (integrate w/ Stopwatch - ideally all hooks in 1 location)
 
         console.log("gamejs useEffect")
 
         if(playing){
-            console.log("start problem time updated")
+            console.log("start time updated")
             setProbTime((new Date()).getTime())
         }
 
@@ -85,8 +74,8 @@ function Game ( {toggle, theme, playing} ) {
             const currTime = (new Date()).getTime()
             setProbTime(currTime)
 
-            console.log("current time - probTime: ")
-            console.log(currTime - probTime)
+            // console.log("current time - probTime: ")
+            // console.log(currTime - probTime)
 
             const problem = {
                 problem: toProblem(1),
@@ -154,8 +143,6 @@ function Game ( {toggle, theme, playing} ) {
         getRandomQuestion()
     })
 
-    const colors = ['green', 'lightgreen', 'grey', 'white', 'red', 'lightcoral']
-
     // returns which interval a certain time difference falls in
     const getRange = (k) => {
         const badTime = 3.5 
@@ -172,15 +159,36 @@ function Game ( {toggle, theme, playing} ) {
 
     }
 
+    const testingRestart = () => {
+
+        setScore(0)
+        setPlaying(1)
+        getRandomQuestion() // put this in the useEffect as well maybe
+        setProblems([])
+        setData([{x: 0, time: 0}])
+
+        const metric = ['timer', 'score']
+
+        // make css more automated w/ useEffect detecting changes to `playing`
+        document.getElementById(metric[toggle % 2]).style.textAlign = 'left'
+        document.getElementById(metric[toggle % 2]).style.fontSize = '100%'
+        document.getElementById('game').style.visibility = 'visible'
+    }
+
+
+    // to do: perhaps click anywhere to retry?
+
     return (
         <div>
 
-            <p id = "score"> Score: {score}</p>
-            <Stopwatch toggle = {toggle} score = {score} playing = {playing}/>
+            <p id = "score"> Score: {score} </p>
+            <Stopwatch toggle = {toggle} score = {score} playing = {playing} setPlaying = {setPlaying}/>
 
             <div id = 'game'>
                 {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange}/>
             </div>
+
+            <button style = {{position: 'relative', left: '45%', width: '120px', height: '50px', fontSize: '30px', visibility: `${['visible', 'hidden'][playing]}`}} onClick = {testingRestart}> Retry </button>
 
             <dl id = 'problem-list'>
                 {problems.map(problem =>
@@ -191,6 +199,7 @@ function Game ( {toggle, theme, playing} ) {
             </dl>
 
             <Graph data = {data} theme = {theme} />
+
 
         </div>
     )

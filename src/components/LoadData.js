@@ -3,8 +3,9 @@ const checkToggle = (setToggle) => {
 
     // for some reason this isn't consistent - doesn't always accept toggle for other users
     if('toggle' in localStorage) {
-      setToggle(parseInt(localStorage.getItem('toggle')) + 1)
-      console.log((parseInt(localStorage.getItem('toggle')) + 1))
+        console.log("loading... toggle")
+        setToggle(parseInt(localStorage.getItem('toggle')) + 1)
+        console.log((parseInt(localStorage.getItem('toggle')) + 1))
     }
 
 }
@@ -12,22 +13,24 @@ const checkToggle = (setToggle) => {
 const checkProblems = (setDisplayProblems) => {
 
     if('displayProblems' in localStorage) {
+        
+        console.log("loading... displayProblems")
 
-      const d = localStorage.getItem('displayProblems')
-      
-      if(d === 'hidden'){
-        document.getElementById('problem-list').style.display = 'none'
-        document.getElementById('graph').style.display = 'none'
-        setDisplayProblems('Show Problems')
-      } else {
-        document.getElementById('problem-list').style.display = 'block'
-        document.getElementById('graph').style.display = 'flex'
-        setDisplayProblems('Hide Problems')
-      }
+        const d = localStorage.getItem('displayProblems')
+        
+        if(d === 'hidden'){
+            document.getElementById('problem-list').style.display = 'none'
+            document.getElementById('graph').style.display = 'none'
+            setDisplayProblems('Show Problems')
+        } else {
+            document.getElementById('problem-list').style.display = 'block'
+            document.getElementById('graph').style.display = 'flex'
+            setDisplayProblems('Hide Problems')
+        }
 
     } else {
-      document.getElementById('problem-list').style.display = 'none'
-      document.getElementById('graph').style.display = 'none'
+        document.getElementById('problem-list').style.display = 'none'
+        document.getElementById('graph').style.display = 'none'
 
     }
 
@@ -36,14 +39,14 @@ const checkProblems = (setDisplayProblems) => {
   const checkTheme = (setTheme) => {
 
     if('theme' in localStorage) { 
+        console.log("loading... theme")
 
-      const storedTheme = parseInt(localStorage.getItem('theme'))
+        const storedTheme = parseInt(localStorage.getItem('theme'))
 
-      const temp = ['light', 'dark']
-
-      console.log("theme in local storage! " + temp[localStorage.getItem('theme')])
-      setColors(storedTheme)
-      setTheme(storedTheme)
+        //const temp = ['light', 'dark']
+        // console.log("theme in local storage! " + temp[localStorage.getItem('theme')])
+        setColors(storedTheme)
+        setTheme(storedTheme)
 
     }
 
