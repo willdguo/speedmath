@@ -13,11 +13,14 @@ function App() {
   const [toggle, setToggle] = useState(1)   // keeps track of game mode; by default is set to countdown mode
   const [theme, setTheme] = useState(0)   // color mode (1 dark, 0 light)
   const [playing, setPlaying] = useState(0) // check when gameplay begins
+  const [lower, setLower] = useState('10') // problem numbers lower bound
+  const [upper, setUpper] = useState('100') // problem numbers upper bound
+  const [maxParam, setMaxParam] = useState('120') //default parameter
 
   // checks if stored mode exists
   window.onload = () => {
     
-    LoadData.checkToggle(setToggle)
+    LoadData.checkToggle(setToggle, setMaxParam)
     LoadData.checkProblems(setDisplayProblems)
     LoadData.checkTheme(setTheme)
 
@@ -63,6 +66,15 @@ function App() {
 
   const closePopup = () => {
     document.getElementById('popup').style.display = 'none'
+
+    if(lower === ""){
+      setLower(10)
+    }
+
+    if(upper === ""){
+      setUpper(100)
+    }
+
     setPlaying(1)
     // console.log('now playing!' + String(playing))
 
@@ -83,6 +95,39 @@ function App() {
     padding: "1px 2px 1px"
   }
 
+  const changeLower = (e) => {
+    const input = e.target.value
+
+    if(!isNaN(input) && parseInt(input) <= parseInt(upper)){
+      setLower(input)
+      console.log(input)
+    } else if(input === ""){
+      setLower(input)
+    }
+
+  }
+
+  const changeUpper = (e) => {
+    const input = e.target.value
+
+    if(!isNaN(input) && parseInt(input) >= parseInt(lower)){
+      setUpper(input)
+      console.log(input)
+    } else if(input === ""){
+      setUpper(input)
+    }
+
+  }
+
+  const changeMaxParam = (e) => {
+    const input = e.target.value
+
+    if(!isNaN(input)){
+      setMaxParam(input)
+    }
+
+  }
+
  
   // to do: allow user to change time/max race amt, as well as arithmetic bounds
   return (
@@ -91,29 +136,54 @@ function App() {
 
       <div id = "popup"> 
 
-        <div id = "popup-content"> 
+          <div id = "description">
 
-          <p id = "bold">Description</p>
-          <p> Test your mental math capabilities. Each question has a nonnegative answer no greater than 400. </p> 
-          <p> There are two modes: </p>
+            <p id = "bold">Description</p>
+            <p> Test your mental math capabilities. Each question has a nonnegative answer no greater than {Math.max(4 * lower * lower, 2 * upper)}. </p> 
+            <p> There are two modes: </p>
 
-          <ul>
-            <li> <strong>Countdown</strong>: Solve as many problems as you can in 120 seconds. </li>
-            <li> <strong>Race</strong>: See how long it takes for you to solve 40 problems. </li>
-          </ul>
+            <ul>
+              <li> <strong>Countdown</strong>: Solve as many problems as you can in 120 seconds. </li>
+              <li> <strong>Race</strong>: See how long it takes for you to solve 40 problems. </li>
+            </ul>
 
-          <p> Current Gamemode: {['Race', 'Countdown'][(toggle % 2)]}</p>
+            <p> Code available on<a href = "https://github.com/willdguo/speedmath">GitHub</a> </p>
+            <p> Inspired by<a href = "https://arithmetic.zetamac.com/">zetamac</a> </p>
 
-          <p onClick = {() => window.location.reload()}> <img src = {restart} style = {popupImgStyle} alt = "restart"/> Restart Button </p>
-          <p onClick = {changeToggle}> <img src = {toggleImg} style = {popupImgStyle} alt = "toggle gamemode" /> Toggle gamemode </p>
-          <p onClick = {toggleProblems}> <img src = {dataImg} style = {popupImgStyle} alt = "show problems" /> Show live problem data </p>
-          <p onClick = {toggleColors}> <img src = {themeImg} style = {popupImgStyle} alt = "change theme" /> Invert colors </p>
+          </div>
 
-          <p> Code available on<a href = "https://github.com/willdguo/speedmath">GitHub</a> </p>
-          <p> Inspired by<a href = "https://arithmetic.zetamac.com/">zetamac</a> </p>
+          <div id = "game-settings">
 
-          <button onClick = {closePopup}> Start </button>
-        </div>
+            <p> Current Gamemode: {['Race', 'Countdown'][(toggle % 2)]}</p>
+
+
+            <div id = "bounds">
+              <p> Max {['points ', 'time '][toggle % 2]} : <input value = {maxParam} onChange = {changeMaxParam} /> </p>
+
+              <p> Lower bound: <input onChange = {changeLower} value = {lower} style = {{marginRight: '50px'}}/> </p>
+              <p> Upper Bound: <input onChange = {changeUpper} value = {upper} /> </p>
+
+              <p id = "paragraph-popup-hover"> (What do these bounds mean?) </p>
+
+              <div id = "paragraph-popup"> 
+                <dl> Each problem has 2 numbers which are generated i.i.d. uniformly as follows:
+                  <li> Addition: each summand is in the range (lower, upper) </li>
+                  <li> Subtraction: the minuend/subtrahend fall between (lower, 2 * upper) </li>
+                  <li> Multiplication: the multipliers fall between (1, 2 * lower) </li>
+                  <li> Division: the answer is in the range (1, 2 * lower) and the dividend is in the range (1, 4 * lower * lower) </li>
+                </dl>              
+              </div>
+
+            </div>
+
+            <p onClick = {() => window.location.reload()}> <img src = {restart} style = {popupImgStyle} alt = "restart"/> Restart Button </p>
+            <p onClick = {changeToggle}> <img src = {toggleImg} style = {popupImgStyle} alt = "toggle gamemode" /> Toggle gamemode </p>
+            <p onClick = {toggleProblems}> <img src = {dataImg} style = {popupImgStyle} alt = "show problems" /> Show live problem data </p>
+            <p onClick = {toggleColors}> <img src = {themeImg} style = {popupImgStyle} alt = "change theme" /> Invert colors </p>
+
+            <button onClick = {closePopup}> Start </button>
+
+          </div>
 
       </div>
 
@@ -127,9 +197,8 @@ function App() {
       </div>      
 
       <div id = "main">
-        <Game toggle = {toggle} theme = {theme} playing = {playing} setPlaying = {setPlaying}/>
+        <Game toggle = {toggle} theme = {theme} playing = {playing} setPlaying = {setPlaying} bounds = {[parseInt(lower), parseInt(upper)]} maxParams={maxParam}/>
       </div>
-
 
     </div>
 

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Stopwatch from './components/Stopwatch'
 import Graph from './components/Graph'
+import Problems from './components/Problems'
 
-function Game ( {toggle, theme, playing, setPlaying} ) {
+function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
 
     const [score, setScore] = useState(0) // keeps track of score
     const [problems, setProblems] = useState([]) // stores past problems
@@ -11,26 +12,16 @@ function Game ( {toggle, theme, playing, setPlaying} ) {
     const [question, setQuestion] = useState([0, 0, 0]) // first two indices = integers, third = operator (add, minus, mult, div = 0, 1, 2, 3)
     const [probTime, setProbTime] = useState((new Date()).getTime()) // tracks how long is spent on each problem
 
+    const maxScore = 4 // max score - game ends once this score is reached when toggle = 0
+    const maxTime = 10 // max time - game ends once time hits 0 when toggle = 1
+
+    const lower = bounds[0]
+    const upper = bounds[1]
+    
     // bound of answers will be between lower & 2 * upper, kinda
-    const lower = 10
-    const upper = 100
     const operator = ['+','-','x','/']
 
     const colors = ['green', 'lightgreen', 'grey', 'white', 'red', 'lightcoral'] // problem colors for good/mid/bad times. odd = light theme, even = dark theme
-
-    useEffect (() => { // useEffect redundant? (integrate w/ Stopwatch - ideally all hooks in 1 location)
-
-        console.log("gamejs useEffect")
-
-        if(playing){
-            console.log("start time updated")
-            setProbTime((new Date()).getTime())
-        }
-
-        return
-
-    }, [playing])
-
 
     function toProblem(i) {
 
@@ -66,81 +57,32 @@ function Game ( {toggle, theme, playing, setPlaying} ) {
         const correctDiv = (question[2] === 3 && input === question[0] / question[1])
 
         if(correctAdd || correctMinus || correctMult || correctDiv) {
-
-            const temp = ['light', 'dark']
-
-            console.log("right answer! theme " + temp[theme])
-
             const currTime = (new Date()).getTime()
             setProbTime(currTime)
 
-            // console.log("current time - probTime: ")
-            // console.log(currTime - probTime)
-
-            const problem = {
+            const problem = { // records current problem
                 problem: toProblem(1),
                 time: ((currTime - probTime)/1000).toFixed(2),
                 id: problems.length,           
             }
 
-            setProblems(problems.concat(problem))
+            setProblems(problems.concat(problem)) // adds problem to running list of solved problems
             
-            getRandomQuestion()
+            if(toggle % 2 === 0 && score >= maxParams - 1){ // 4 is the hardcoded maxScore = FIX
+                setQuestion([NaN, NaN, 2])
+            } else {
+                Problems.genProblem(upper, lower, setQuestion)()
+            }
+
             setValue('')
             setScore(score + 1)
             setData(data.concat([{x: problem.id + 1, time: problem.time}]))
-
         }
 
     }
 
-    function getRandomAdd() {
-        const rand1 = Math.floor(Math.random() * (upper - lower)) + lower
-        const rand2 = Math.floor(Math.random() * (upper - lower)) + lower
-
-        console.log('random add')
-        console.log(rand1, rand2)
-        setQuestion([rand1, rand2, 0])
-    }
-
-    // remove chance of getting same number 2ce by altering bounds
-    function getRandomMinus() {
-        const rand1 = Math.floor(Math.random() * (2 * upper - lower)) + lower
-        const rand2 = Math.floor(Math.random() * (2 * upper - lower)) + lower
-
-        console.log('random minus')
-        // console.log(rand1, rand2)
-        setQuestion([Math.max(rand1, rand2), Math.min(rand1, rand2), 1])
-    }
-
-    function getRandomMult() {
-        const rand1 = Math.ceil(Math.random() * (2 * lower - 1)) + 1 
-        const rand2 = Math.ceil(Math.random() * (2 * lower - 1)) + 1
-        console.log('random mult')
-
-        setQuestion([rand1, rand2, 2])
-    }
-
-    function getRandomDiv() {
-        const rand1 = Math.ceil(Math.random() * (2 * lower - 1)) + 1
-        const rand2 = Math.ceil(Math.random() * (2 * lower - 1)) + 1
-        const val1 = rand1 * rand2
-        console.log('random div')
-
-        setQuestion([val1, rand2, 3])
-
-    }
-
-    // consider extracting getRandomQuestion to new file
-    function getRandomQuestion(){
-        const questionType = [getRandomAdd, getRandomAdd, getRandomMinus, getRandomMinus, getRandomMult, getRandomDiv] 
-        const pickType = Math.floor(Math.random() * (questionType.length))
-    
-        questionType[pickType]()
-    }
-
     window.addEventListener('load', function() {
-        getRandomQuestion()
+        Problems.genProblem(upper, lower, setQuestion)() // update to adapt to problem range
     })
 
     // returns which interval a certain time difference falls in
@@ -160,10 +102,10 @@ function Game ( {toggle, theme, playing, setPlaying} ) {
     }
 
     const testingRestart = () => {
-
+        setValue('')
         setScore(0)
         setPlaying(1)
-        getRandomQuestion() // put this in the useEffect as well maybe
+        Problems.genProblem(upper, lower, setQuestion)() // put this in the useEffect as well maybe
         setProblems([])
         setData([{x: 0, time: 0}])
 
@@ -176,13 +118,12 @@ function Game ( {toggle, theme, playing, setPlaying} ) {
     }
 
 
-    // to do: perhaps click anywhere to retry?
-
+    // to do: sort problem list based on time
     return (
         <div>
 
             <p id = "score"> Score: {score} </p>
-            <Stopwatch toggle = {toggle} score = {score} playing = {playing} setPlaying = {setPlaying}/>
+            <Stopwatch toggle = {toggle} score = {score} playing = {playing} setPlaying = {setPlaying} setProbTime = {setProbTime} maxParams = {maxParams}/>
 
             <div id = 'game'>
                 {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange}/>
