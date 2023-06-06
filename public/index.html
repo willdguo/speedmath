@@ -28,6 +28,8 @@
         left: 0;
         top: 0;
         display: flex;
+        flex-direction: row;
+        overflow-y: auto;
       }
 
       #description {
@@ -39,8 +41,41 @@
       #game-settings {
         margin-top: 10%;
         margin-left: 10%;
+        padding-bottom: 10px;
         height: 400px;
+        width: 500px;
         border: 2px solid gray;
+      }
+
+      @media (max-width: 720px) {
+        #popup {
+          flex-direction: column;
+        }
+
+        #description, 
+        #game-settings {
+          width: 80%
+        }
+
+        #game input {
+          width: 50%;
+        }
+
+        #buttons {
+          position: static;
+          margin: 10px;
+          right: auto;
+          /* left: 1%; */
+        }
+
+        #graph {
+          display: none;
+        }
+
+        #showProblems {
+          display: none;
+        }
+
       }
 
       #bounds {
@@ -77,17 +112,12 @@
       }
 
       #corner {
-        position: absolute;
+        position: static;
         top: 30px;
         left: 40px;
         padding-top: 5px
       }
 
-      #description {
-        padding-top: 50px;
-        padding-left: 10px;
-        text-align: left;
-      }
 
       #bold {
         font-weight: bold;

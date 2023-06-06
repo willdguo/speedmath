@@ -7,7 +7,7 @@ const checkToggle = (setToggle, setMaxParam) => {
         console.log("loading... toggle")
         setToggle(toggle)
         setMaxParam(['40','120'][toggle % 2])
-        console.log(toggle)
+        //console.log(toggle)
     }
 
 }

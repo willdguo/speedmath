@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Game from './Game'
 import restart from './icons/restart1.png'
 import toggleImg from './icons/toggle2.png'
@@ -9,7 +9,6 @@ import LoadData from './components/LoadData'
 function App() {
 
   const [displayProblems, setDisplayProblems] = useState('Show Problems')   // toggle visibility of problems; by default is not visible
-  //change displayProblems to simple boolean?
   const [toggle, setToggle] = useState(1)   // keeps track of game mode; by default is set to countdown mode
   const [theme, setTheme] = useState(0)   // color mode (1 dark, 0 light)
   const [playing, setPlaying] = useState(0) // check when gameplay begins
@@ -18,13 +17,13 @@ function App() {
   const [maxParam, setMaxParam] = useState('120') //default parameter
 
   // checks if stored mode exists
-  window.onload = () => {
+  useEffect(() => {
     
     LoadData.checkToggle(setToggle, setMaxParam)
     LoadData.checkProblems(setDisplayProblems)
     LoadData.checkTheme(setTheme)
 
-  }
+  }, [])
 
   
   // change state of toggle buton
@@ -191,14 +190,12 @@ function App() {
 
         <button onClick = {() => window.location.reload()}> <img src = {restart} style = {buttonImgStyle} alt = "restart"/> </button>
         <button onClick = {changeToggle}> <img src = {toggleImg} style = {buttonImgStyle} alt = "toggle gamemode" /> </button>
-        <button onClick = {toggleProblems}> <img src = {dataImg} style = {buttonImgStyle} alt = "show problems" /> </button>
+        <button id = "showProblems" onClick = {toggleProblems}> <img src = {dataImg} style = {buttonImgStyle} alt = "show problems" /> </button>
         <button onClick = {toggleColors} id = 'toggle'> <img src = {themeImg} style = {buttonImgStyle} alt = "change theme" /> </button>
 
       </div>      
 
-      <div id = "main">
-        <Game toggle = {toggle} theme = {theme} playing = {playing} setPlaying = {setPlaying} bounds = {[parseInt(lower), parseInt(upper)]} maxParams={maxParam}/>
-      </div>
+      <Game toggle = {toggle} theme = {theme} playing = {playing} setPlaying = {setPlaying} bounds = {[parseInt(lower), parseInt(upper)]} maxParams={maxParam}/>
 
     </div>
 

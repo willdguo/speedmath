@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Stopwatch from './components/Stopwatch'
 import Graph from './components/Graph'
 import Problems from './components/Problems'
@@ -12,9 +12,6 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
     const [question, setQuestion] = useState([0, 0, 0]) // first two indices = integers, third = operator (add, minus, mult, div = 0, 1, 2, 3)
     const [probTime, setProbTime] = useState((new Date()).getTime()) // tracks how long is spent on each problem
 
-    const maxScore = 4 // max score - game ends once this score is reached when toggle = 0
-    const maxTime = 10 // max time - game ends once time hits 0 when toggle = 1
-
     const lower = bounds[0]
     const upper = bounds[1]
     
@@ -22,6 +19,10 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
     const operator = ['+','-','x','/']
 
     const colors = ['green', 'lightgreen', 'grey', 'white', 'red', 'lightcoral'] // problem colors for good/mid/bad times. odd = light theme, even = dark theme
+
+    useEffect(() => {
+        Problems.genProblem(upper, lower, setQuestion)() // update to adapt to problem range
+    }, [upper, lower])
 
     function toProblem(i) {
 
@@ -68,7 +69,7 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
 
             setProblems(problems.concat(problem)) // adds problem to running list of solved problems
             
-            if(toggle % 2 === 0 && score >= maxParams - 1){ // 4 is the hardcoded maxScore = FIX
+            if(toggle % 2 === 0 && score >= maxParams - 1){
                 setQuestion([NaN, NaN, 2])
             } else {
                 Problems.genProblem(upper, lower, setQuestion)()
@@ -80,10 +81,6 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
         }
 
     }
-
-    window.addEventListener('load', function() {
-        Problems.genProblem(upper, lower, setQuestion)() // update to adapt to problem range
-    })
 
     // returns which interval a certain time difference falls in
     const getRange = (k) => {
@@ -120,7 +117,7 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
 
     // to do: sort problem list based on time
     return (
-        <div>
+        <div id = "main">
 
             <p id = "score"> Score: {score} </p>
             <Stopwatch toggle = {toggle} score = {score} playing = {playing} setPlaying = {setPlaying} setProbTime = {setProbTime} maxParams = {maxParams}/>
