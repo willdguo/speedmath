@@ -3,10 +3,10 @@ const checkToggle = (setToggle, setMaxParam) => {
 
     // for some reason this isn't consistent - doesn't always accept toggle for other users
     if('toggle' in localStorage) {
-        const toggle = parseInt(localStorage.getItem('toggle')) + 1
+        const toggle = (parseInt(localStorage.getItem('toggle')) + 1) % 2
         console.log("loading... toggle")
         setToggle(toggle)
-        setMaxParam(['40','120'][toggle % 2])
+        setMaxParam(['40','120'][toggle])
         //console.log(toggle)
     }
 

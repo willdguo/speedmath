@@ -5,6 +5,7 @@ import toggleImg from './icons/toggle2.png'
 import dataImg from './icons/data1.png'
 import themeImg from './icons/light1.png'
 import LoadData from './components/LoadData'
+import saveGame from './services/saveGame'
 
 function App() {
 
@@ -22,13 +23,14 @@ function App() {
     LoadData.checkToggle(setToggle, setMaxParam)
     LoadData.checkProblems(setDisplayProblems)
     LoadData.checkTheme(setTheme)
+    saveGame.getAll()
 
   }, [])
 
   
   // change state of toggle buton
   function changeToggle() {
-      localStorage.setItem('toggle', toggle)
+      localStorage.setItem('toggle', (toggle % 2))
       window.location.reload()
   }
             

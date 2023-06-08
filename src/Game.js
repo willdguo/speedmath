@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Stopwatch from './components/Stopwatch'
 import Graph from './components/Graph'
 import Problems from './components/Problems'
+import saveGame from './services/saveGame'
 
 function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
 
@@ -11,12 +12,10 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
     const [value, setValue] = useState('')  // input box value - refreshes to '' upon correct answer
     const [question, setQuestion] = useState([0, 0, 0]) // first two indices = integers, third = operator (add, minus, mult, div = 0, 1, 2, 3)
     const [probTime, setProbTime] = useState((new Date()).getTime()) // tracks how long is spent on each problem
-
+    // Lower & upper bounds
     const lower = bounds[0]
     const upper = bounds[1]
-    
-    // bound of answers will be between lower & 2 * upper, kinda
-    const operator = ['+','-','x','/']
+    const operator = ['+','-','x','/'] // Relevant operators
 
     const colors = ['green', 'lightgreen', 'grey', 'white', 'red', 'lightcoral'] // problem colors for good/mid/bad times. odd = light theme, even = dark theme
 
@@ -24,6 +23,24 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
         Problems.genProblem(upper, lower, setQuestion)() // update to adapt to problem range
     }, [upper, lower])
 
+
+    // Hook to save problems whenever a game ends
+    useEffect(() => {
+
+        if(playing === 0 && score > 0){ // Only saves when playing is set to "not playing" & when score > 0 to avoid saving when the page first loads
+
+            saveGame.recordGame({
+                problems: problems,
+                data: data,
+                toggle: toggle,
+                bounds: bounds
+            })
+
+        }
+
+    }, [playing])
+
+    // Converts problem to string
     function toProblem(i) {
 
         if (i === 1){
@@ -34,7 +51,6 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
 
         return question[0] + " " + operator[question[2]] + " " + question[1]
     }
-
 
     // user input -> checks if int, then checks if answer is right
     function handleValueChange(event) {
@@ -98,7 +114,8 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
 
     }
 
-    const testingRestart = () => {
+    const retry = () => {
+
         setValue('')
         setScore(0)
         setPlaying(1)
@@ -126,7 +143,7 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
                 {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange}/>
             </div>
 
-            <button style = {{position: 'relative', left: '45%', width: '120px', height: '50px', fontSize: '30px', visibility: `${['visible', 'hidden'][playing]}`}} onClick = {testingRestart}> Retry </button>
+            <button style = {{position: 'relative', left: '45%', width: '120px', height: '50px', fontSize: '30px', visibility: `${['visible', 'hidden'][playing]}`}} onClick = {retry}> Retry </button>
 
             <dl id = 'problem-list'>
                 {problems.map(problem =>
