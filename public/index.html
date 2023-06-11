@@ -130,16 +130,35 @@
         z-index: 2
       }
 
+      @media(max-width: 1200px){
+        .problem-data{
+          flex-direction: column;
+          align-content: center;
+        }
+
+        #problem-list{
+          position: relative;
+          text-align: auto;
+          height: 100px;
+          overflow: auto;
+        }
+
+      }
+
+      .problem-data {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: center;
+        max-width: 100%;
+      }
+
       #problem-list {
-        position: fixed;
-        right: 10%;
-        text-align: right;
+        margin-left: 200px;
         list-style-type: none;
         height: 400px;
         overflow: auto;
         font-size: 25px;
       }
-
 
       #graph {
         display: flex;
@@ -150,6 +169,22 @@
       #graph .recharts-wrapper {
         transform: translateX(5%);
       } 
+
+      #pastGames {
+        border: 1px solid black;
+        font-weight: bold;
+        max-width: 500px;
+      }
+
+      #pastGames-list {
+        list-style-type: none;
+        max-height: 60px;
+        overflow: auto;
+      }
+
+      #pastGames-list li{
+        max-width: 300px;
+      }
 
     </style>
 

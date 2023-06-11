@@ -23,7 +23,7 @@ function App() {
     LoadData.checkToggle(setToggle, setMaxParam)
     LoadData.checkProblems(setDisplayProblems)
     LoadData.checkTheme(setTheme)
-    saveGame.getAll()
+    // console.log(saveGame.getAll())
 
   }, [])
 
@@ -129,8 +129,7 @@ function App() {
 
   }
 
- 
-  // to do: allow user to change time/max race amt, as well as arithmetic bounds
+
   return (
 
     <div>

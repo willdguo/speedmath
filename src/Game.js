@@ -3,6 +3,8 @@ import Stopwatch from './components/Stopwatch'
 import Graph from './components/Graph'
 import Problems from './components/Problems'
 import saveGame from './services/saveGame'
+import ProblemList from './components/ProblemList'
+import History from './components/History'
 
 function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
 
@@ -13,27 +15,29 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
     const [question, setQuestion] = useState([0, 0, 0]) // first two indices = integers, third = operator (add, minus, mult, div = 0, 1, 2, 3)
     const [probTime, setProbTime] = useState((new Date()).getTime()) // tracks how long is spent on each problem
     // Lower & upper bounds
-    const lower = bounds[0]
-    const upper = bounds[1]
+    const [lower, upper] = bounds
     const operator = ['+','-','x','/'] // Relevant operators
 
-    const colors = ['green', 'lightgreen', 'grey', 'white', 'red', 'lightcoral'] // problem colors for good/mid/bad times. odd = light theme, even = dark theme
-
     useEffect(() => {
-        Problems.genProblem(upper, lower, setQuestion)() // update to adapt to problem range
+        Problems.genProblem(upper, lower, setQuestion)()
     }, [upper, lower])
 
 
     // Hook to save problems whenever a game ends
     useEffect(() => {
 
-        if(playing === 0 && score > 0){ // Only saves when playing is set to "not playing" & when score > 0 to avoid saving when the page first loads
+        // Only saves when playing is set to "not playing" & when score > 0 to avoid saving when the page first loads
+        if(playing === 0 && score > 0){ 
 
-            saveGame.recordGame({
+            const newObj = {
                 problems: problems,
-                data: data,
                 toggle: toggle,
                 bounds: bounds
+            }
+
+            saveGame.recordGame(newObj).then(result => {
+                console.log(newObj)
+                console.log("obj posted")
             })
 
         }
@@ -44,9 +48,9 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
     function toProblem(i) {
 
         if (i === 1){
-            const temp = [question[0] + question[1], question[0] - question[1], question[0] * question[1], question[0]/question[1]][question[2]]
+            const answ = [question[0] + question[1], question[0] - question[1], question[0] * question[1], question[0]/question[1]][question[2]]
 
-            return question[0] + " " + operator[question[2]] + " " + question[1] + " = " + temp
+            return question[0] + " " + operator[question[2]] + " " + question[1] + " = " + answ
         }
 
         return question[0] + " " + operator[question[2]] + " " + question[1]
@@ -98,22 +102,6 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
 
     }
 
-    // returns which interval a certain time difference falls in
-    const getRange = (k) => {
-        const badTime = 3.5 
-        const goodTime = 1.5
-
-        // 0 = good, 1 = mid, 2 = bad
-        if(k < goodTime){
-            return 0
-        }else if (k < badTime){
-            return 1
-        }else{
-            return 2
-        }
-
-    }
-
     const retry = () => {
 
         setValue('')
@@ -145,16 +133,12 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
 
             <button style = {{position: 'relative', left: '45%', width: '120px', height: '50px', fontSize: '30px', visibility: `${['visible', 'hidden'][playing]}`}} onClick = {retry}> Retry </button>
 
-            <dl id = 'problem-list'>
-                {problems.map(problem =>
-                    <li key = {problem.id} id = {problem.id} style = {{color: `${colors[getRange(problem.time) * 2 + (theme % 2)]}`, opacity: '50%', background: ['white','black'][theme]}}>
-                        {problem.problem} {problem.time}
-                    </li>
-                ).reverse()}
-            </dl>
+            <div className = 'problem-data'>
+                <Graph data = {data} theme = {theme} />
+                <ProblemList problems = {problems} theme = {theme} />
+            </div>
 
-            <Graph data = {data} theme = {theme} />
-
+            <History playing = {playing} setProblems = {setProblems} setData = {setData} setScore = {setScore} theme = {theme}/>
 
         </div>
     )
