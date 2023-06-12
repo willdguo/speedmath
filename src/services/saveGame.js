@@ -1,21 +1,19 @@
 import axios from "axios"
-
-const baseUrl = "http://localhost:3001"
+const baseUrl = "/api/saves"
 
 
 const getAll = () => {
 
-    return axios.get(`${baseUrl}/saves`)
+    return axios.get(`${baseUrl}`)
 
 
 }
 
 const recordGame = ( obj ) => {
     
-    return axios.post(`${baseUrl}/saves`, obj)
+    return axios.post(`${baseUrl}`, obj)
 
 }
-
 
 
 export default { getAll, recordGame }
