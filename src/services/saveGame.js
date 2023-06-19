@@ -1,5 +1,5 @@
 import axios from "axios"
-const baseUrl = "/api/saves"
+const baseUrl = "https://speedmath-backend.vercel.app/api/saves"
 
 
 const getAll = () => {
