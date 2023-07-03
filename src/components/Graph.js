@@ -2,7 +2,7 @@ import { ScatterChart, Scatter, Label, XAxis, YAxis } from 'recharts'
 
 const Graph = ( {data, theme} ) => {
 
-    const colors = ['black', 'white']
+    const colors = ['white', 'black']
 
     return (
 

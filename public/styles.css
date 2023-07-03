@@ -1,0 +1,328 @@
+html,
+body,
+#root {
+  font-family: "Lucida Console";
+  font-size: 100%;
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+    display: flex;
+    color: black;
+    background-color: white;
+    height: 100%;
+    width: 100%;
+}
+
+.container.dark {
+    color: white;
+    background-color: black;
+}
+
+.buttons {
+    position: fixed;
+    right: 1%;
+    z-index: 2;
+}
+
+.buttons button {
+    background-color: white;
+    border: 1px solid #999;
+    border-radius: 10px;
+    padding: 4px 4px 0 4px;
+    margin: 10px;
+    transition: background-color ease 0.3s
+}
+
+.buttons button:hover {
+    background-color: #bbb
+}
+
+.buttons button img {
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    margin-left: 0;
+}
+
+
+.popup {
+    background-color: white;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    overflow-y: auto;
+}
+
+.popup.dark {
+    background-color: black;
+}
+
+.popup .description {
+    margin-top: 10%;
+    margin-left: 10%;
+    width: 40%;
+}
+
+.popup .game-settings {
+    margin-top: 10%;
+    margin-left: 10%;
+    padding: 10px;
+    width: 500px;
+    height: 400px;
+    border: 2px solid gray;
+    border-radius: 10px;
+}
+
+.popup .game-settings .bounds {
+  text-align: left;
+}
+
+.popup .game-settings .bounds input {
+    background-color: transparent;
+    border-radius: 4px;
+}
+
+.popup.dark .game-settings .bounds input{
+    color: white;
+    border: 1px solid white;
+}
+
+.popup .game-settings .paragraph-popup-container {
+    position: relative;
+    display: inline-block;
+    transition: background-color ease 0.3s;
+}
+
+.popup .game-settings .paragraph-popup-container .paragraph-popup {
+    z-index: 10;
+    top: 100%;
+    left: 1%;
+    position: absolute;
+    font-size: 60%;
+    display: none;
+    border: 1px solid gray;
+    width: 270%;
+    padding: 2px;
+    background-color: black;
+    color: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.popup .game-settings .paragraph-popup-container .paragraph-popup-hover {
+    font-size: 60%;
+    padding: 2px;
+    border: 1px solid gray
+}
+
+.popup .game-settings .paragraph-popup-container:hover {
+    background-color: #bbb
+}
+
+.popup .game-settings .paragraph-popup-container:hover .paragraph-popup {
+    display: block;
+}
+
+.popup .game-settings img {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    padding: 1px 2px 1px;
+}
+  
+.popup .game-settings button {
+    background-color: transparent;
+    border: 1px solid #999;
+    border-radius: 4px;
+    transition: background-color ease 0.3s
+}
+
+.popup .game-settings button:hover {
+    background-color: #bbb
+}
+
+.popup.dark button {
+    color: white;
+}
+
+
+.main {
+    width: 100%;
+}
+
+.main .game {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 5px 0 5px 0;
+    text-align: center;
+    font-size: 30px;
+    background:lightgray;
+}
+
+.timer, .score {
+    margin-left: 10px;
+}
+
+.main .game input {
+    background-color: white;
+    height: 30px;
+    margin-left: 10px;
+    border-radius: 4px;
+    font-size: 30px;
+    width: 15%;
+}
+
+.main .game.dark {
+    background-color: #212632;
+}
+
+.main .retry {
+    position: relative;
+    left: 45%;
+    margin-top: 10px;
+    width: 120px;
+    height: 50px;
+    font-size: 30px;
+    border: none;
+    border-radius: 10px;
+    background-color: transparent;
+    transition: background-color ease 0.3s;
+}
+
+.main .retry.hidden {
+    display: none;
+}
+
+.main .retry.dark {
+    background-color: white;
+}
+
+.main .retry.dark:hover {
+    background-color: #bbb;
+}
+
+.main .problem-data {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    max-width: 100%;
+    margin-top: 10px;
+}
+
+.main .problem-data.hidden {
+    display: none;
+}
+
+.main .problem-data .problem-list {
+  margin-left: 200px;
+  list-style-type: none;
+  height: 400px;
+  overflow: auto;
+  font-size: 25px;
+  opacity: 50%;
+}
+
+.main .problem-data .problem-list .good {
+    color: green;
+}
+
+.main .problem-data .problem-list .good.dark {
+    color: lightgreen;
+}
+
+.main .problem-data .problem-list .mid.dark {
+    color: white;
+}
+
+.main .problem-data .problem-list .bad {
+    color: red;
+}
+
+.main .problem-data .problem-list .bad.dark {
+    color: lightcoral;
+}
+
+.main .problem-data .graph {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+}
+
+.main .problem-data .graph .recharts-wrapper {
+  transform: translateX(5%);
+} 
+
+/* .pastGames {
+  border: 1px solid black;
+  font-weight: bold;
+  max-width: 500px;
+}
+
+.pastGames-list {
+  list-style-type: none;
+  max-height: 60px;
+  overflow: auto;
+}
+
+.pastGames-list li{
+  max-width: 300px;
+} */
+
+.bold {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+@media (max-width: 720px) {
+    .popup {
+      flex-direction: column;
+    }
+  
+    .description, 
+    .game-settings {
+      width: 80%
+    }
+  
+    .game input {
+      width: 50%;
+    }
+  
+    .buttons {
+      position: static;
+      margin: 10px;
+      right: auto;
+    }
+  
+    .graph {
+      display: none;
+    }
+  
+    .showProblems {
+      display: none;
+    }
+  
+}
+
+@media(max-width: 1200px){
+    .problem-data{
+      flex-direction: column;
+      align-content: center;
+    }
+  
+    #problem-list{
+      position: relative;
+      text-align: auto;
+      height: 100px;
+      overflow: auto;
+    }
+  
+  }
+  

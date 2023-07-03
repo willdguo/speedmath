@@ -22,9 +22,9 @@ const Stopwatch = ( {toggle, score, playing, setPlaying, setProbTime, maxParams}
                     setTime(0)
                     setPlaying(0)
 
-                    document.getElementById('game').style.visibility = 'hidden'
-                    document.getElementById('score').style.textAlign = 'center'
-                    document.getElementById('score').style.fontSize = '30px'
+                    // document.getElementById('game').style.visibility = 'hidden'
+                    // document.getElementById('score').style.textAlign = 'center'
+                    // document.getElementById('score').style.fontSize = '30px'
 
                 }
 
@@ -36,9 +36,9 @@ const Stopwatch = ( {toggle, score, playing, setPlaying, setProbTime, maxParams}
         
                 } else {
 
-                    document.getElementById('game').style.visibility = 'hidden'
-                    document.getElementById('timer').style.textAlign = "center"
-                    document.getElementById('timer').style.fontSize = "30px"
+                    // document.getElementById('game').style.visibility = 'hidden'
+                    // document.getElementById('timer').style.textAlign = "center"
+                    // document.getElementById('timer').style.fontSize = "30px"
                     setPlaying(0)
 
                 }
@@ -65,7 +65,7 @@ const Stopwatch = ( {toggle, score, playing, setPlaying, setProbTime, maxParams}
     }, [playing, setPlaying, score, toggle, setProbTime, maxParams])
 
     return (
-        <p id = "timer"> {text} {time} </p>
+        <p className = "timer"> {text} {time} </p>
     )
 
 }

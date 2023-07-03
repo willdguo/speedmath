@@ -43,7 +43,7 @@ const History = ( {playing, setProblems, setData, setScore, theme} ) => {
     if(!playing){
 
         return (
-            <div id = "pastGames" style = {{background: ['white','black'][theme]}}>
+            <div className = "pastGames" style = {{background: ['white','black'][theme]}}>
     
                 <p style = {{background: ['white','black'][theme], color: ['black','white'][theme]}}> Past Games: </p>
     

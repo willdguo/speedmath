@@ -6,7 +6,7 @@ import saveGame from './services/saveGame'
 import ProblemList from './components/ProblemList'
 import History from './components/History'
 
-function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
+function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams, displayProblems} ) {
 
     const [score, setScore] = useState(0) // keeps track of score
     const [problems, setProblems] = useState([]) // stores past problems
@@ -110,35 +110,27 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams} ) {
         Problems.genProblem(upper, lower, setQuestion)() // put this in the useEffect as well maybe
         setProblems([])
         setData([{x: 0, time: 0}])
-
-        const metric = ['timer', 'score']
-
-        // make css more automated w/ useEffect detecting changes to `playing`
-        document.getElementById(metric[toggle % 2]).style.textAlign = 'left'
-        document.getElementById(metric[toggle % 2]).style.fontSize = '100%'
-        document.getElementById('game').style.visibility = 'visible'
     }
-
 
     // to do: sort problem list based on time
     return (
-        <div id = "main">
+        <div className = 'main'>
 
-            <p id = "score"> Score: {score} </p>
+            <p className = "score"> Score: {score} </p>
             <Stopwatch toggle = {toggle} score = {score} playing = {playing} setPlaying = {setPlaying} setProbTime = {setProbTime} maxParams = {maxParams}/>
 
-            <div id = 'game'>
-                {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange}/>
+            <div className = {`game ${theme ? '' : 'dark'}`}>
+                {question[0]} {operator[question[2]]} {question[1]} = <input value = {value} onChange = {handleValueChange} disabled = {!playing}/>
             </div>
 
-            <button style = {{position: 'relative', left: '45%', width: '120px', height: '50px', fontSize: '30px', visibility: `${['visible', 'hidden'][playing]}`}} onClick = {retry}> Retry </button>
+            <button className = {`retry ${playing ? 'hidden' : ''} ${theme ? '' : 'dark'}`} onClick = {retry}> Retry </button>
 
-            <div className = 'problem-data'>
+            <div className = {`problem-data ${displayProblems ? '' : 'hidden'}`}>
                 <Graph data = {data} theme = {theme} />
                 <ProblemList problems = {problems} theme = {theme} />
             </div>
 
-            <History playing = {playing} setProblems = {setProblems} setData = {setData} setScore = {setScore} theme = {theme}/>
+            {/* <History playing = {playing} setProblems = {setProblems} setData = {setData} setScore = {setScore} theme = {theme}/> */}
 
         </div>
     )
