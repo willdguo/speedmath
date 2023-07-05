@@ -1,5 +1,5 @@
 import axios from "axios"
-const baseUrl = "https://speedmath-woad.vercel.app/api/saves"
+const baseUrl = "https://speedmath-backend.vercel.app/api/saves"
 
 let token = null
 
