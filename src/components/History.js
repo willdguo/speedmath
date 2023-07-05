@@ -5,23 +5,15 @@ const History = ( {playing, setProblems, setData, setScore, theme} ) => {
     const gameType = ['Race', 'Countdown']
     const [pastGames, setPastGames] = useState([])
 
-
     useEffect(() => {
 
-        if(playing === 0){
-
-            setTimeout(() => {
-                saveGame.getAll()
-                    .then(result => {
-                        console.log(result.data)
-                        setPastGames(result.data)
-            
-                    })
-
-            }, 1000)
-
-        }
-
+        setTimeout(() => {
+            saveGame.getAll()
+            .then(result => {
+                // console.log(result.data)
+                setPastGames(result)
+            })
+        }, 1000)
 
     }, [playing])
 
@@ -36,29 +28,29 @@ const History = ( {playing, setProblems, setData, setScore, theme} ) => {
         }))
 
         setScore(game.problems.length)
-
-
+        // setTime(getTotalTime(game))
     }
 
-    if(!playing){
-
-        return (
-            <div className = "pastGames" style = {{background: ['white','black'][theme]}}>
-    
-                <p style = {{background: ['white','black'][theme], color: ['black','white'][theme]}}> Past Games: </p>
-    
-                <dl id = "pastGames-list" style = {{background: ['white','black'][theme]}}>
-                    {pastGames.map(game => 
-                        <li key = {game.id} style = {{background: ['white','black'][theme]}}> 
-                            <button onClick={() => setGame(game)} style = {{background: ['white','gray'][theme], color: ['black', 'white'][theme]}}> {gameType[game.toggle]} | Problems: {game.problems.length} </button> 
-                        </li>
-                    ).reverse()}
-                </dl>
-    
-            </div>
-        )
-
+    const getTotalTime = (game) => {
+        const sum = game.problems.reduce((prevTime, problem) => prevTime + Number(problem.time), 0)
+        return sum.toFixed(2)
     }
+
+    return (
+        <div className = {`pastGames ${theme ? '' : 'dark'}`}>
+
+            <h2> Past Games: </h2>
+
+            <dl className = "pastGames-list">
+                {pastGames.map(game => 
+                    <li key = {game.id}> 
+                        <p onClick={() => setGame(game)}> {gameType[game.toggle]} | Problems: {game.problems.length} | Time: {getTotalTime(game)} </p> 
+                    </li>
+                ).reverse()}
+            </dl>
+
+        </div>
+    )
 
 }
 

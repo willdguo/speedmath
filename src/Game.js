@@ -32,7 +32,8 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams, displayP
             const newObj = {
                 problems: problems,
                 toggle: toggle,
-                bounds: bounds
+                bounds: bounds,
+                date_created: new Date(),
             }
 
             saveGame.recordGame(newObj).then(result => {
@@ -130,7 +131,9 @@ function Game ( {toggle, theme, playing, setPlaying, bounds, maxParams, displayP
                 <ProblemList problems = {problems} theme = {theme} />
             </div>
 
-            {/* <History playing = {playing} setProblems = {setProblems} setData = {setData} setScore = {setScore} theme = {theme}/> */}
+            {playing === 0
+            ? <History playing = {playing} setProblems = {setProblems} setData = {setData} setScore = {setScore} theme = {theme}/>
+            : null }
 
         </div>
     )

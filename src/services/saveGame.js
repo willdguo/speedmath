@@ -1,19 +1,33 @@
 import axios from "axios"
-const baseUrl = "https://speedmath-backend.vercel.app/api/saves"
+const baseUrl = "/api/saves"
 
+let token = null
 
-const getAll = () => {
+const setToken = (newToken) => {
+    token = `Bearer ${newToken}`
+}
 
-    return axios.get(`${baseUrl}`)
+const getAll = async () => {
+
+    const config = {
+        headers: {Authorization: token},
+    }
+
+    const response = await axios.get(baseUrl, config)
+    return response.data
 
 
 }
 
 const recordGame = ( obj ) => {
+
+    const config = {
+        headers: {Authorization: token},
+    }
     
-    return axios.post(`${baseUrl}`, obj)
+    return axios.post(baseUrl, obj, config)
 
 }
 
 
-export default { getAll, recordGame }
+export default { getAll, recordGame, setToken }

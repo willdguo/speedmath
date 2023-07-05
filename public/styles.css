@@ -149,6 +149,55 @@ body,
     color: white;
 }
 
+.popup .login-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10%;
+    margin-left: 10%;
+    padding: 10px;
+    width: 500px;
+    height: 400px;
+    border: 2px solid gray;
+    border-radius: 10px;
+}
+
+.popup .login-container input {
+    height: 30px;
+    font-size: 20px;
+    background: transparent;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+.popup .login-container button {
+    background-color: transparent;
+    margin-top: 10px;
+    width: 80px;
+    border: 1px solid #bbb;
+    transition: background-color ease 0.3s;
+}
+
+.popup .login-container button:hover {
+    background-color: black;
+    color: white;
+}
+
+.popup.dark .login-container button:hover {
+    background-color: white;
+    color: black;
+}
+
+.popup.dark .login-container input {
+    height: 30px;
+    font-size: 20px;
+    background: transparent;
+    color: white;
+}
+
+.popup .login-container .error-msg {
+    color: #f55;
+    margin-top: 10px;
+}
+
 
 .main {
     width: 100%;
@@ -260,21 +309,44 @@ body,
   transform: translateX(5%);
 } 
 
-/* .pastGames {
-  border: 1px solid black;
-  font-weight: bold;
-  max-width: 500px;
+.pastGames {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 40%;
+    max-height: 300px;
+    overflow: auto;
+    background-color: transparent;
+    border: 1px solid black;
+}
+
+.pastGames.dark {
+    background-color:#212632;
+    border-radius: 10px;
 }
 
 .pastGames-list {
   list-style-type: none;
-  max-height: 60px;
+  max-height: 300px;
   overflow: auto;
+  padding-right: 20px;
 }
 
-.pastGames-list li{
-  max-width: 300px;
-} */
+.pastGames-list li {
+    color: black;
+    transition: color ease 0.3s
+}
+
+.pastGames-list li p:hover {
+    color: #bbb
+}
+
+.pastGames.dark .pastGames-list li {
+    color: white;
+    transition: color ease 0.3s
+}
 
 .bold {
     font-weight: bold;
@@ -324,5 +396,5 @@ body,
       overflow: auto;
     }
   
-  }
+}
   

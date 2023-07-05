@@ -4,7 +4,9 @@ import restart from './icons/restart1.png'
 import toggleImg from './icons/toggle2.png'
 import dataImg from './icons/data1.png'
 import themeImg from './icons/light1.png'
+import logoutImg from './icons/logout.png'
 import LoadData from './components/LoadData'
+import Login from './components/Login'
 import saveGame from './services/saveGame'
 
 function App() {
@@ -16,10 +18,21 @@ function App() {
   const [lower, setLower] = useState('10') // problem numbers lower bound
   const [upper, setUpper] = useState('100') // problem numbers upper bound
   const [maxParam, setMaxParam] = useState('120') //default parameter
-  const [popup, setPopup] = useState(true)
+  const [popup, setPopup] = useState(true) // popup that shows up on reload
+
+  const [user, setUser] = useState(null)
 
   // checks if stored mode exists
   useEffect(() => {
+
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    
+    if(loggedUserJSON) {
+      const saved = JSON.parse(loggedUserJSON)
+      console.log(loggedUserJSON)
+      setUser(saved)
+      saveGame.setToken(saved.token)
+    }
     
     LoadData.checkToggle(setToggle, setMaxParam)
     LoadData.checkProblems(setDisplayProblems)
@@ -84,7 +97,43 @@ function App() {
 
   }
 
+  const gameSettings = () => (
+    <div className = "game-settings">
 
+      <p> Current Gamemode: {['Race', 'Countdown'][(toggle % 2)]}</p>
+
+      <div className = "bounds">
+        <p> Max {['points ', 'time '][toggle % 2]} : <input value = {maxParam} onChange = {changeMaxParam} /> </p>
+
+        <p> Lower bound: <input onChange = {changeLower} value = {lower} /> </p>
+        <p> Upper Bound: <input onChange = {changeUpper} value = {upper} /> </p>
+
+        <div className = "paragraph-popup-container">
+          <div className = "paragraph-popup-hover"> 
+            (What do these bounds mean?) 
+          </div>
+
+          <div className = "paragraph-popup"> 
+            <dl> Each problem has 2 numbers which are generated i.i.d. uniformly at random as follows:
+              <li> Addition: each summand is in the range (lower, upper) </li>
+              <li> Subtraction: the minuend/subtrahend fall between (lower, 2 * upper) </li>
+              <li> Multiplication: the multipliers fall between (1, 2 * lower) </li>
+              <li> Division: the answer is in the range (1, 2 * lower) and the dividend is in the range (1, 4 * lower * lower) </li>
+            </dl>              
+          </div>
+        </div>
+
+      </div>
+
+      <p onClick = {() => window.location.reload()}> <img src = {restart} alt = "restart"/> Restart Button </p>
+      <p onClick = {changeToggle}> <img src = {toggleImg} alt = "toggle gamemode" /> Toggle gamemode </p>
+      <p onClick = {toggleProblems}> <img src = {dataImg} alt = "show problems" /> Show live problem data </p>
+      <p onClick = {toggleColors}> <img src = {themeImg} alt = "change theme" /> Invert colors </p>
+
+      <button onClick = {() => {setPopup(false); setPlaying(1)}}> Start </button>
+
+    </div>
+  )
 
   const showPopup = () => (    
     <div className = {`popup ${theme ? '' : 'dark'}`}> 
@@ -105,44 +154,19 @@ function App() {
 
       </div>
 
-      <div className = "game-settings">
-
-        <p> Current Gamemode: {['Race', 'Countdown'][(toggle % 2)]}</p>
-
-        <div className = "bounds">
-          <p> Max {['points ', 'time '][toggle % 2]} : <input value = {maxParam} onChange = {changeMaxParam} /> </p>
-
-          <p> Lower bound: <input onChange = {changeLower} value = {lower} /> </p>
-          <p> Upper Bound: <input onChange = {changeUpper} value = {upper} /> </p>
-
-          <div className = "paragraph-popup-container">
-            <div className = "paragraph-popup-hover"> 
-              (What do these bounds mean?) 
-            </div>
-
-            <div className = "paragraph-popup"> 
-              <dl> Each problem has 2 numbers which are generated i.i.d. uniformly at random as follows:
-                <li> Addition: each summand is in the range (lower, upper) </li>
-                <li> Subtraction: the minuend/subtrahend fall between (lower, 2 * upper) </li>
-                <li> Multiplication: the multipliers fall between (1, 2 * lower) </li>
-                <li> Division: the answer is in the range (1, 2 * lower) and the dividend is in the range (1, 4 * lower * lower) </li>
-              </dl>              
-            </div>
-          </div>
-
-        </div>
-
-        <p onClick = {() => window.location.reload()}> <img src = {restart} alt = "restart"/> Restart Button </p>
-        <p onClick = {changeToggle}> <img src = {toggleImg} alt = "toggle gamemode" /> Toggle gamemode </p>
-        <p onClick = {toggleProblems}> <img src = {dataImg} alt = "show problems" /> Show live problem data </p>
-        <p onClick = {toggleColors}> <img src = {themeImg} alt = "change theme" /> Invert colors </p>
-
-        <button onClick = {() => {setPopup(false); setPlaying(1)}}> Start </button>
-
-      </div>
+      {user === null
+        ? <Login user = {user} setUser = {setUser} />
+        : gameSettings() 
+      }
 
     </div>
   )
+
+  const logout = () => {
+    setUser(null)
+    setPopup(true)
+    window.localStorage.clear()
+  }
 
 
   return (
@@ -150,11 +174,16 @@ function App() {
     <div className = {`container ${theme ? '' : 'dark'}`}>
 
       <div className = "buttons">
+        {user === null ? null : <p> Logged in as {user.username} </p>}
 
         <button onClick = {() => window.location.reload()}> <img src = {restart} alt = "restart"/> </button>
         <button onClick = {changeToggle}> <img src = {toggleImg} alt = "toggle gamemode" /> </button>
         <button className = "showProblems" onClick = {toggleProblems}> <img src = {dataImg} alt = "show problems" /> </button>
         <button onClick = {toggleColors} > <img src = {themeImg} alt = "change theme" /> </button>
+        {user === null 
+          ? null
+          : <button onClick = {logout}> <img src = {logoutImg} alt = "logout" /> </button>
+        }
 
       </div>  
 
