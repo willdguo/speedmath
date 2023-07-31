@@ -1,5 +1,7 @@
 import axios from "axios"
 const baseUrl = "https://speedmath-backend.vercel.app/api/saves"
+// const baseUrl = 'http://localhost:3001/api/saves'
+
 
 let token = null
 
@@ -29,5 +31,5 @@ const recordGame = ( obj ) => {
 
 }
 
-
+// eslint-disable-next-line import/no-anonymous-default-export
 export default { getAll, recordGame, setToken }
