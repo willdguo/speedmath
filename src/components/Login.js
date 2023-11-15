@@ -2,14 +2,14 @@ import { useState } from 'react'
 import loginService from '../services/login'
 import saveGame from '../services/saveGame'
 import userService from '../services/user'
+import { Segment, Form, Header, Button, Message, Icon } from 'semantic-ui-react'
 
-
-const Login = ( {user, setUser}) => {
-
+const LoginForm = ({user, setUser}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState(null)
     const [newUser, setNewUser] = useState(false)
+    const [loading, setLoading] = useState(false);
 
 
     const handleUsername = (e) => {
@@ -21,7 +21,8 @@ const Login = ( {user, setUser}) => {
     }
 
     const handleLogin = async () => {
-        console.log('logging in with', username, password)
+        setLoading(true)
+        // console.log('logging in with', username, password)
 
         try {
             const user = await loginService.login({username, password})
@@ -42,11 +43,13 @@ const Login = ( {user, setUser}) => {
             }, 7000)
 
         }
-
+        
+        setLoading(false)
     }
 
     const handleCreateUser = async () => {
-        console.log('creating new user with', username, password)
+        // console.log('creating new user with', username, password)
+        setLoading(true)
 
         try {
 
@@ -70,57 +73,70 @@ const Login = ( {user, setUser}) => {
                 setErrorMessage(null)
             }, 7000)
         }
+
+        setLoading(false)
     }
 
-    const loginForm = () => (
-        <div className = 'login-container'>
-
-            <h2> Sign In </h2>
-
-            <p> Username </p>
-            <input onChange = {handleUsername} value = {username}/>
-
-            <p> Password </p>
-            <input type = "password" onChange = {handlePassword} value = {password} onKeyDown = {(e) => {if(e.key === 'Enter'){handleLogin()}}}/>
-
-            <button onClick = {handleLogin}> Login </button>
-
-            <p className = 'newUser' onClick = {() => setNewUser(!newUser)}> New user? </p>
-
-            <div className = "error-msg">
-                {errorMessage}
-            </div>
-
-        </div>
-    )
-
-    const newUserForm = () => (
-        <div className = "login-container">
-            <h2> Create Account </h2>
-
-            <p> Username </p>
-            <input value = {username} onChange = {handleUsername} />
-
-            <p> Password </p>
-            <input value = {password} type = 'password' onChange = {handlePassword} onKeyDown = {(e) => {if(e.key === 'Enter'){handleCreateUser()}}}/>
-
-            <button onClick = {handleCreateUser}> Submit </button>
-
-            <p className = 'newUser' onClick = {() => setNewUser(!newUser)}> Log in </p>
-
-            <div className = "error-msg">
-                {errorMessage}
-            </div>
-        </div>
-    )
+    const pStyle = {
+        opacity:"50%",
+        textDecoration:"underline",
+    }
 
     return (
-        <div>
-            {newUser
-                ? newUserForm()
-                : loginForm()
-            }
-        </div>
+        <Form>
+            <Header as="h2">{newUser ? "Create Account" : "Sign In"}</Header>
+    
+            <Form.Input
+                label="Username"
+                placeholder="Username"
+                width={12}
+                onChange={handleUsername}
+            />
+    
+            <Form.Input 
+                label="Password"
+                type="password"
+                placeholder="Password"
+                width={12}
+                onChange={handlePassword}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        newUser ? handleCreateUser() : handleLogin();
+                    }
+                }}
+            />
+    
+            <Button
+                type="submit"
+                onClick={() => (newUser ? handleCreateUser() : handleLogin())}
+            >
+                {newUser ? "Submit" : "Login"}
+            </Button>
+
+            {loading && <Icon loading name="spinner"/>}
+    
+            <p 
+                onClick={() => setNewUser(!newUser)}
+                style={pStyle}
+            >
+                {newUser ? "Log In" : "New user?"}
+            </p>
+    
+            {errorMessage && (
+            <Message negative>
+                <Message.Header>Error</Message.Header>
+                <p>{errorMessage}</p>
+            </Message>
+            )}
+      </Form>
+    )
+}
+
+const Login = ({user, setUser}) => {
+    return (
+        <Segment>
+            <LoginForm user={user} setUser={setUser}/>
+        </Segment>
     )
 }
 
