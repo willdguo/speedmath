@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const Stopwatch = ( {toggle, score, playing, setPlaying, setProbTime, startTime} ) => {
 
-    const maxTime = 120; // change for testing
+    const maxTime = 120 + 3; // change for testing
     const maxScore = 40;
 
     const [time, setTime] = useState(toggle % 2 === 0 ? 0 : maxTime)
@@ -36,7 +36,7 @@ const Stopwatch = ( {toggle, score, playing, setPlaying, setProbTime, startTime}
 
     return (
         <p> 
-            {text} {time} 
+            {text} {toggle % 2 === 0 ? Math.max(time - 3, 0) : Math.min(time, maxTime - 3)} 
         </p>
     );
 }

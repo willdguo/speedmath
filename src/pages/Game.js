@@ -5,12 +5,13 @@ import Problems from '../utils/Problems'
 import saveGame from '../services/saveGame'
 import ProblemList from '../components/ProblemList'
 import History from '../components/History'
-import { Grid, Container, Segment, Button, Input, Header, Dropdown } from 'semantic-ui-react'
+import { Grid, Container, Segment, Button, Input, Dropdown, Header } from 'semantic-ui-react'
 import { useNavigate } from 'react-router-dom'
 
 const Game = ( {toggle, setToggle} ) => {
 
     const [playing, setPlaying] = useState(true);
+    const [countoff, setCountoff] = useState(0);
     const [score, setScore] = useState(0); // keeps track of score
     const [problems, setProblems] = useState([]); // stores past problems
     const [data, setData] = useState([{x: 0, time: 0}]); // stores problem data (problem number & problem time) to be graphed
@@ -29,7 +30,7 @@ const Game = ( {toggle, setToggle} ) => {
     // Hook to save problems whenever a game ends & update starting time otherwise
     useEffect(() => {
         // Only saves when playing is set to "not playing" & when score > 0 to avoid saving when the page first loads
-        if(!playing && score > 0){ 
+        if (!playing && score > 0) { 
             const newObj = {
                 problems: problems,
                 toggle: toggle,
@@ -41,16 +42,29 @@ const Game = ( {toggle, setToggle} ) => {
             });
         }
 
+        if (playing) {
+            setCountoff(3);
+        }
+
         const timeout = setInterval(() => {
             if(!playing){
+                // console.log(startTime);
                 startTime.current = new Date();
-                setProbTime(startTime.current.getTime());
+                setProbTime(startTime.current.getTime() + 3000);
             }
         }, 500);
 
         return () => clearInterval(timeout);
     }, [playing]);
     
+    useEffect(() => {
+        console.log(countoff);
+        if (countoff > 0) {
+            setTimeout(() => {
+                setCountoff(countoff - 1)
+            }, 1000);
+        }
+    }, [countoff]);
 
     // Converts problem to string
     function toProblem(i) {
@@ -157,17 +171,22 @@ const Game = ( {toggle, setToggle} ) => {
                             setProbTime = {setProbTime} 
                             startTime = {startTime}
                         />
+                    {countoff === 0
+                        ? 
+                        <Segment style={segmentStyle}>
+                            <span style={spanStyle}>
+                                {question[0]} {operator[question[2]]} {question[1]} =
+                            </span>
+                            <Input 
+                                value = {value} 
+                                onChange = {handleValueChange} 
+                                size='huge'
+                            />
+                        </Segment>
+                        :
+                        <Header as="h1" textAlign="center"> {countoff} </Header>
+                    }
 
-                    <Segment style={segmentStyle}>
-                        <span style={spanStyle}>
-                            {question[0]} {operator[question[2]]} {question[1]} =
-                        </span>
-                        <Input 
-                            value = {value} 
-                            onChange = {handleValueChange} 
-                            size='huge'
-                        />
-                    </Segment>
                 </>
             }
 

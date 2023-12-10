@@ -123,10 +123,10 @@ const LoginForm = ({user, setUser}) => {
             </p>
     
             {errorMessage && (
-            <Message negative>
-                <Message.Header>Error</Message.Header>
-                <p>{errorMessage}</p>
-            </Message>
+                <Message negative>
+                    <Message.Header>Error</Message.Header>
+                    <p>{errorMessage}</p>
+                </Message>
             )}
       </Form>
     )
